@@ -41,11 +41,4 @@ Notes preserve knowledge. Todos drive action. History records reality.
 
 ## Documentation
 
-Detailed documentation is available in `/docs`:
-
-- [Notes](docs/NOTES.md)
-- [Todos](docs/TODOS.md)
-- [Scheduler](docs/SCHEDULER.md)
-- [Database](docs/DATABASE.md)
-- [API](docs/API.md)
-- [Roadmap](docs/ROADMAP.md)
+Full design specification and implementation guide is available in [`/docs/readme.md`](docs/readme.md) — the starting point for developers and AI agents.
