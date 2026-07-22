@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Notely - Actions</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500&amp;family=Geist:wght@500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "surface-container": "#f0ecf5",
+                    "on-primary-fixed": "#04006d",
+                    "background": "#fcf8ff",
+                    "on-secondary-container": "#636562",
+                    "inverse-primary": "#c0c1ff",
+                    "secondary-fixed-dim": "#c6c7c3",
+                    "surface-container-highest": "#e4e1ea",
+                    "surface-container-low": "#f5f2fb",
+                    "on-primary": "#ffffff",
+                    "inverse-surface": "#303036",
+                    "outline-variant": "#c7c5d4",
+                    "on-tertiary-fixed": "#1c1b1b",
+                    "error": "#ba1a1a",
+                    "secondary-fixed": "#e2e3df",
+                    "primary-fixed-dim": "#c0c1ff",
+                    "surface-variant": "#e4e1ea",
+                    "error-container": "#ffdad6",
+                    "on-tertiary": "#ffffff",
+                    "inverse-on-surface": "#f2eff8",
+                    "surface": "#fcf8ff",
+                    "primary-fixed": "#e1e0ff",
+                    "on-surface": "#1b1b21",
+                    "secondary": "#5d5f5c",
+                    "on-background": "#1b1b21",
+                    "on-primary-fixed-variant": "#373a9b",
+                    "tertiary-container": "#3f3e3e",
+                    "on-secondary-fixed-variant": "#454745",
+                    "surface-container-lowest": "#ffffff",
+                    "on-secondary-fixed": "#1a1c1a",
+                    "tertiary-fixed": "#e5e2e1",
+                    "on-surface-variant": "#464652",
+                    "on-tertiary-fixed-variant": "#474746",
+                    "on-secondary": "#ffffff",
+                    "secondary-container": "#e2e3df",
+                    "surface-container-high": "#eae7f0",
+                    "primary": "#15157d",
+                    "surface-bright": "#fcf8ff",
+                    "on-error": "#ffffff",
+                    "tertiary-fixed-dim": "#c8c6c5",
+                    "tertiary": "#292828",
+                    "outline": "#777683",
+                    "primary-container": "#2e3192",
+                    "on-error-container": "#93000a",
+                    "surface-dim": "#dbd9e1",
+                    "surface-tint": "#4f54b4",
+                    "on-tertiary-container": "#aba9a9",
+                    "on-primary-container": "#9da1ff"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.125rem",
+                    "lg": "0.25rem",
+                    "xl": "0.5rem",
+                    "full": "0.75rem"
+            },
+            "spacing": {
+                    "gutter": "24px",
+                    "margin-desktop": "40px",
+                    "container-max": "1200px",
+                    "margin-mobile": "16px",
+                    "unit": "8px"
+            },
+            "fontFamily": {
+                    "headline-lg": ["Geist"],
+                    "headline-md": ["Geist"],
+                    "label-sm": ["Geist"],
+                    "headline-lg-mobile": ["Geist"],
+                    "body-lg": ["Inter"],
+                    "body-md": ["Inter"]
+            },
+            "fontSize": {
+                    "headline-lg": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "600"}],
+                    "headline-md": ["20px", {"lineHeight": "28px", "fontWeight": "500"}],
+                    "label-sm": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "600"}],
+                    "headline-lg-mobile": ["24px", {"lineHeight": "32px", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                    "body-lg": ["18px", {"lineHeight": "32px", "fontWeight": "400"}],
+                    "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #e4e1ea; border-radius: 10px; }
+        
+        .active-tab {
+            border-bottom-width: 2px;
+            border-color: #15157d;
+            color: #15157d;
+        }
+    </style>
+</head>
+<body class="bg-[#FAFAFA] font-body-md text-on-surface pb-24 min-h-screen">
+<!-- TopAppBar -->
+<header class="flex justify-between items-center px-4 md:px-margin-desktop h-16 w-full sticky top-0 border-b border-outline-variant bg-surface z-50">
+<div class="flex items-center gap-4">
+<button class="hover:bg-surface-container-low transition-colors p-2 rounded-full active:opacity-80 active:scale-95 transition-all">
+<span class="material-symbols-outlined text-primary">menu</span>
+</button>
+<h1 class="font-headline-md text-headline-md font-bold text-primary">Notely</h1>
+</div>
+<div class="w-8 h-8 rounded-full bg-primary-container flex items-center justify-center overflow-hidden">
+<img alt="User profile" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCb9TbP4wO3hPPR8lcesax5J0znnmJUVQ1M3Z9GCqfvPWBB_OpyT3P_AcZt6jatZMSYO1t4_L8-q2ZVidrNf-RGUZZikJXcYn_cNPuR-NeOIeimN1YNww2popTN1zbXKS8t9ct6H3HEysSHcTXkWXvYTqYPBy0QscC1Ocun6mNAPnht8A4OQtnYlWm4Y567d8jFo_Tq8tUjMjwJ7lIJeY3_xHXg1ZEs56hqxwkHtkmM_eMD544H8mWG"/>
+</div>
+</header>
+<main class="max-w-[720px] mx-auto px-4 md:px-0 py-8">
+<!-- Heading Section -->
+<div class="mb-8">
+<h2 class="font-headline-lg text-headline-lg text-on-surface mb-2">Actions</h2>
+<p class="text-on-surface-variant font-body-md">Manage your deep-work queue and high-priority tasks.</p>
+</div>
+<!-- Tabs -->
+<nav class="flex gap-8 mb-8 border-b border-outline-variant">
+<button class="pb-3 font-label-sm text-label-sm active-tab uppercase tracking-widest transition-all">Active</button>
+<button class="pb-3 font-label-sm text-label-sm text-on-surface-variant hover:text-primary uppercase tracking-widest transition-all">Paused</button>
+<button class="pb-3 font-label-sm text-label-sm text-on-surface-variant hover:text-primary uppercase tracking-widest transition-all">Archived</button>
+</nav>
+<!-- Todo List -->
+<div class="space-y-4">
+<!-- Urgent & Important Item -->
+<div class="bg-white p-5 border border-outline-variant border-l-4 border-l-primary rounded-lg shadow-sm hover:translate-x-1 transition-all group cursor-pointer">
+<div class="flex justify-between items-start mb-2">
+<div class="flex gap-2">
+<span class="px-2 py-0.5 rounded-sm border border-error text-error font-label-sm text-[10px] uppercase">Urgent</span>
+<span class="px-2 py-0.5 rounded-sm border border-primary text-primary font-label-sm text-[10px] uppercase">Important</span>
+</div>
+<div class="flex items-center gap-1 text-on-surface-variant group-hover:text-primary">
+<span class="material-symbols-outlined text-[16px]">refresh</span>
+<span class="font-label-sm text-[10px]">Daily</span>
+</div>
+</div>
+<h3 class="font-headline-md text-headline-md text-on-surface mb-1">Finalize Quarterly Strategy</h3>
+<p class="text-on-surface-variant font-body-md mb-4">Review all department heads' feedback and consolidate into a single vision document for the board.</p>
+<div class="flex items-center gap-4 text-on-surface-variant font-label-sm">
+<div class="flex items-center gap-1">
+<span class="material-symbols-outlined text-[18px]">calendar_today</span>
+<span>Today, 4:00 PM</span>
+</div>
+<div class="flex items-center gap-1">
+<span class="material-symbols-outlined text-[18px]">history</span>
+<span>Next: Tomorrow</span>
+</div>
+</div>
+</div>
+<!-- Recurring Standard Item -->
+<div class="bg-white p-5 border border-outline-variant border-l-4 border-l-primary rounded-lg shadow-sm hover:translate-x-1 transition-all group cursor-pointer">
+<div class="flex justify-between items-start mb-2">
+<div class="flex gap-2">
+<span class="px-2 py-0.5 rounded-sm border border-primary text-primary font-label-sm text-[10px] uppercase">Important</span>
+</div>
+<div class="flex items-center gap-1 text-on-surface-variant group-hover:text-primary">
+<span class="material-symbols-outlined text-[16px]">refresh</span>
+<span class="font-label-sm text-[10px]">Weekly</span>
+</div>
+</div>
+<h3 class="font-headline-md text-headline-md text-on-surface mb-1">Design System Audit</h3>
+<p class="text-on-surface-variant font-body-md mb-4">Check component consistency across new marketing pages.</p>
+<div class="flex items-center gap-4 text-on-surface-variant font-label-sm">
+<div class="flex items-center gap-1">
+<span class="material-symbols-outlined text-[18px]">calendar_today</span>
+<span>Friday, 10:00 AM</span>
+</div>
+</div>
+</div>
+<!-- Task with No Description -->
+<div class="bg-white p-5 border border-outline-variant border-l-4 border-l-primary rounded-lg shadow-sm hover:translate-x-1 transition-all group cursor-pointer">
+<div class="flex justify-between items-start mb-2">
+<div class="flex gap-2">
+<span class="px-2 py-0.5 rounded-sm border border-outline-variant text-on-surface-variant font-label-sm text-[10px] uppercase">Normal</span>
+</div>
+</div>
+<h3 class="font-headline-md text-headline-md text-on-surface mb-1">Invoicing for client project X</h3>
+<div class="flex items-center gap-4 text-on-surface-variant font-label-sm mt-4">
+<div class="flex items-center gap-1">
+<span class="material-symbols-outlined text-[18px]">calendar_today</span>
+<span>May 15, 12:00 PM</span>
+</div>
+</div>
+</div>
+<!-- Overdue Urgent Task -->
+<div class="bg-white p-5 border border-outline-variant border-l-4 border-l-error rounded-lg shadow-sm hover:translate-x-1 transition-all group cursor-pointer">
+<div class="flex justify-between items-start mb-2">
+<div class="flex gap-2">
+<span class="px-2 py-0.5 rounded-sm border border-error text-error font-label-sm text-[10px] uppercase">Urgent</span>
+</div>
+</div>
+<h3 class="font-headline-md text-headline-md text-on-surface mb-1">Server Maintenance Check</h3>
+<p class="text-on-surface-variant font-body-md mb-4">Investigate latency spikes in the production environment detected at 2 AM.</p>
+<div class="flex items-center gap-4 font-label-sm">
+<div class="flex items-center gap-1 text-error">
+<span class="material-symbols-outlined text-[18px]">error</span>
+<span>Overdue: 2h ago</span>
+</div>
+</div>
+</div>
+</div>
+<!-- FAB -->
+<div class="fixed bottom-24 right-6 md:right-margin-desktop z-40">
+<button class="w-14 h-14 bg-primary text-on-primary rounded-full shadow-lg flex items-center justify-center hover:bg-on-primary-fixed-variant transition-all active:scale-90 shadow-primary/20">
+<span class="material-symbols-outlined text-[32px]">add</span>
+</button>
+</div>
+</main>
+<!-- BottomNavBar -->
+<nav class="fixed bottom-0 w-full z-50 flex justify-around items-center h-20 bg-surface px-4 rounded-t-xl border-t border-outline-variant">
+<a class="flex flex-col items-center justify-center text-secondary hover:bg-surface-container-lowest transition-colors p-2 rounded-lg active:scale-90 transition-transform duration-150" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+<span class="font-label-sm text-label-sm">Dashboard</span>
+</a>
+<a class="flex flex-col items-center justify-center text-secondary hover:bg-surface-container-lowest transition-colors p-2 rounded-lg active:scale-90 transition-transform duration-150" href="#">
+<span class="material-symbols-outlined">description</span>
+<span class="font-label-sm text-label-sm">Notes</span>
+</a>
+<a class="flex flex-col items-center justify-center text-primary font-bold hover:bg-surface-container-lowest transition-colors p-2 rounded-lg active:scale-90 transition-transform duration-150" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">task_alt</span>
+<span class="font-label-sm text-label-sm">Todos</span>
+</a>
+<a class="flex flex-col items-center justify-center text-secondary hover:bg-surface-container-lowest transition-colors p-2 rounded-lg active:scale-90 transition-transform duration-150" href="#">
+<span class="material-symbols-outlined">history</span>
+<span class="font-label-sm text-label-sm">History</span>
+</a>
+</nav>
+<script>
+        // Simple Interaction logic for tabs
+        document.querySelectorAll('nav button').forEach(button => {
+            button.addEventListener('click', () => {
+                document.querySelectorAll('nav button').forEach(b => {
+                    b.classList.remove('active-tab');
+                    b.classList.add('text-on-surface-variant');
+                });
+                button.classList.add('active-tab');
+                button.classList.remove('text-on-surface-variant');
+            });
+        });
+    </script>
+</body></html>
