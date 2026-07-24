@@ -58,10 +58,10 @@
                         <span class="flex items-center gap-1.5"><span class="material-symbols-outlined text-[16px]">calendar_today</span> Due: {{ $history->due_at->format('M d') }}</span>
                         @endif
                         @if($history->completed_at)
-                        <span class="flex items-center gap-1.5 text-secondary font-medium"><span class="material-symbols-outlined text-[16px]">done_all</span> Completed</span>
+                        <span class="flex items-center gap-1.5 text-secondary font-medium"><span class="material-symbols-outlined text-[16px]">done_all</span> Completed {{ $history->completed_at->format('M d, g:i A') }}</span>
                         @endif
                         @if($history->skipped_at)
-                        <span class="flex items-center gap-1.5 text-error font-medium"><span class="material-symbols-outlined text-[16px]">block</span> Skipped</span>
+                        <span class="flex items-center gap-1.5 text-error font-medium"><span class="material-symbols-outlined text-[16px]">block</span> Skipped {{ $history->skipped_at->format('M d, g:i A') }}</span>
                         @endif
                     </div>
                     @if($history->completion_note)
