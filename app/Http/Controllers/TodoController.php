@@ -7,6 +7,7 @@ use App\Models\Todo;
 use App\Models\TodoHistory;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
 use Illuminate\View\View;
 
 class TodoController extends Controller
@@ -129,10 +130,10 @@ class TodoController extends Controller
         $todo->next_due_at = $this->calculateNextDue($todo);
         $todo->save();
 
-        return redirect()->route('todos.index');
+        return redirect()->to($request->input('_redirect', route('todos.index')));
     }
 
-    public function skip(Todo $todo): RedirectResponse
+    public function skip(Request $request, Todo $todo): RedirectResponse
     {
         TodoHistory::create([
             'todo_id' => $todo->id,
@@ -143,7 +144,22 @@ class TodoController extends Controller
         $todo->next_due_at = $this->calculateNextDue($todo);
         $todo->save();
 
-        return redirect()->route('todos.index');
+        return redirect()->to($request->input('_redirect', route('todos.index')));
+    }
+
+    private function nextWeekdayFromList(Carbon $anchor, array $days): Carbon
+    {
+        $anchorDay = (int) $anchor->format('N');
+        $days = array_map('intval', $days);
+        sort($days);
+
+        foreach ($days as $day) {
+            if ($day > $anchorDay) {
+                return $anchor->copy()->next($day % 7);
+            }
+        }
+
+        return $anchor->copy()->next($days[0] % 7);
     }
 
     private function calculateNextDue(Todo $todo): ?string
@@ -158,7 +174,9 @@ class TodoController extends Controller
 
         $next = match ($todo->repeat_type) {
             'daily' => $anchor->copy()->addDay(),
-            'weekly' => $anchor->copy()->addWeek(),
+            'weekly' => $todo->days_of_week
+                ? $this->nextWeekdayFromList($anchor, $todo->days_of_week)
+                : $anchor->copy()->addWeek(),
             'monthly' => $anchor->copy()->addMonth(),
             'yearly' => $anchor->copy()->addYear(),
             'interval' => $anchor->copy()->add(

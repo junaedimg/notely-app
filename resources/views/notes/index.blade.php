@@ -17,12 +17,17 @@
 
 <div class="flex flex-col gap-4">
     @forelse($notes as $note)
-    <a href="{{ route('notes.show', $note) }}" class="bg-surface-container-low border border-outline-variant rounded-lg p-5 flex flex-col gap-2 hover:border-primary transition-colors cursor-pointer active:scale-[0.98] group">
-        <div class="flex justify-between items-start">
+    <div class="bg-surface-container-low border border-outline-variant rounded-lg p-5 flex flex-col gap-2 hover:border-primary transition-colors group relative">
+        <a href="{{ route('notes.show', $note) }}" class="absolute inset-0 z-0"></a>
+        <div class="flex justify-between items-start relative z-10">
             <h3 class="font-headline-md text-primary font-bold">{{ $note->title }}</h3>
-            @if($note->is_pinned)
-            <span class="material-symbols-outlined text-primary text-[18px]" style="font-variation-settings: 'FILL' 1;">push_pin</span>
-            @endif
+            <div class="flex items-center gap-1" onclick="event.stopPropagation()">
+                <form method="POST" action="{{ route('notes.toggle-pin', $note) }}">
+                    @csrf
+                    <input type="hidden" name="_redirect" value="{{ request()->url() }}">
+                    <button class="material-symbols-outlined text-secondary hover:text-primary active:scale-90 transition-all p-1 text-[18px] {{ $note->is_pinned ? 'text-primary' : '' }}" style="{{ $note->is_pinned ? 'font-variation-settings: \'FILL\' 1;' : '' }}">push_pin</button>
+                </form>
+            </div>
         </div>
         @if($note->content)
         <p class="text-on-surface-variant font-body-md line-clamp-2 leading-relaxed">{{ Str::limit(strip_tags($note->content), 200) }}</p>
@@ -35,7 +40,7 @@
             <span class="bg-surface-container-highest px-2 py-0.5 rounded text-[10px] uppercase tracking-wider text-on-surface-variant border border-outline-variant" style="border-left: 3px solid {{ $note->color }};">{{ $note->color }}</span>
             @endif
         </div>
-    </a>
+    </div>
     @empty
     <div class="bg-surface-container-lowest border border-outline-variant rounded-xl p-8 text-center">
         <span class="material-symbols-outlined text-outline text-4xl mb-3">description</span>

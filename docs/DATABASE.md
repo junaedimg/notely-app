@@ -1,6 +1,6 @@
 # Database Schema
 
-Database dibagi menjadi tiga tabel utama.
+Database dibagi menjadi tiga tabel utama + tabel sistem Laravel.
 
 ```
 Notes
@@ -36,35 +36,21 @@ Contoh:
 
 ### id
 
-**Type**
+**Type**: bigint
 
-```
-bigint
-```
-
-Primary Key.
-
-Identitas unik setiap Note.
+Primary Key. Identitas unik setiap Note.
 
 ---
 
 ### title
 
-**Type**
-
-```
-varchar(255)
-```
+**Type**: varchar(255)
 
 Judul Note.
 
-Contoh
-
 ```
 Belajar Laravel
-
 Catatan Servis Motor
-
 Ide Blog
 ```
 
@@ -72,69 +58,37 @@ Ide Blog
 
 ### content
 
-**Type**
+**Type**: longtext
 
-```
-longtext
-```
-
-Isi Note.
-
-Mendukung Markdown atau HTML.
+Isi Note. Mendukung Markdown atau HTML.
 
 ---
 
 ### is_pinned
 
-**Type**
+**Type**: boolean
 
-```
-boolean
-```
+Default: `false`
 
-Menentukan apakah Note dipin agar muncul di bagian atas.
-
-Default
-
-```
-false
-```
+Menentukan apakah Note dipin agar muncul di bagian atas. Bisa di-toggle langsung dari index/show tanpa masuk form edit.
 
 ---
 
 ### color
 
-**Type**
+**Type**: varchar(20)
+
+Warna Note. Digunakan hanya untuk tampilan.
 
 ```
-varchar(20)
-```
-
-Warna Note.
-
-Digunakan hanya untuk tampilan.
-
-Contoh
-
-```
-yellow
-
-blue
-
-green
+yellow, blue, green, red, purple
 ```
 
 ---
 
-### created_at
+### created_at / updated_at
 
-Timestamp saat Note dibuat.
-
----
-
-### updated_at
-
-Timestamp terakhir Note diubah.
+Timestamp standar Laravel.
 
 ---
 
@@ -142,17 +96,14 @@ Timestamp terakhir Note diubah.
 
 ## Purpose
 
-Menyimpan pekerjaan atau aksi.
-
-Todo merupakan pusat seluruh aktivitas aplikasi.
+Menyimpan pekerjaan atau aksi. Todo merupakan pusat seluruh aktivitas aplikasi.
 
 Todo mendukung:
-
 - Reminder
-- Repeat
+- Repeat (daily, weekly, monthly, yearly, interval)
 - Scheduler
 - Eisenhower Matrix
-- Status
+- Status (active, paused, archived)
 - Riwayat Penyelesaian
 
 Todo dapat berdiri sendiri maupun berasal dari sebuah Note.
@@ -163,361 +114,162 @@ Todo dapat berdiri sendiri maupun berasal dari sebuah Note.
 
 ### id
 
-Primary Key.
-
-Identitas unik Todo.
+Primary Key. Identitas unik Todo.
 
 ---
 
 ### note_id
 
-Foreign Key ke tabel Notes.
-
-Nullable.
-
-Jika NULL berarti Todo berdiri sendiri.
-
-Contoh
-
-```
-☐ Bayar Internet
-```
-
-Tidak berasal dari Note.
-
-Sedangkan
-
-```
-Note
-
-Belajar Laravel
-
-↓
-
-Todo
-
-☐ Routing
-
-☐ Controller
-```
-
-berarti Todo memiliki note_id.
+Foreign Key ke tabel Notes. Nullable. Jika NULL berarti Todo berdiri sendiri.
 
 ---
 
 ### title
 
+**Type**: varchar(255)
+
 Judul Todo.
-
-Contoh
-
-```
-Bayar Internet
-
-Belajar Laravel
-
-Ganti Oli
-```
 
 ---
 
 ### description
 
-Deskripsi tambahan Todo.
+**Type**: text (nullable)
 
-Opsional.
+Deskripsi tambahan Todo.
 
 ---
 
 ### status
 
-Menentukan apakah Todo masih aktif.
+**Type**: varchar(20), default: `active`
 
-Possible values
-
-```
-active
-
-paused
-
-archived
-```
-
-Meaning
-
-active
-
-Scheduler berjalan.
-
-paused
-
-Scheduler mengabaikan Todo.
-
-archived
-
-Todo sudah tidak digunakan lagi.
+| Value | Meaning |
+|-------|---------|
+| `active` | Scheduler berjalan |
+| `paused` | Scheduler mengabaikan Todo |
+| `archived` | Todo sudah tidak digunakan lagi |
 
 ---
 
-### is_important
+### is_important / is_urgent
 
-Boolean.
+**Type**: boolean
 
-Menandakan apakah Todo termasuk pekerjaan penting.
-
-Digunakan oleh Eisenhower Matrix.
-
----
-
-### is_urgent
-
-Boolean.
-
-Menandakan apakah Todo termasuk pekerjaan mendesak.
-
-Digunakan oleh Eisenhower Matrix.
+Digunakan oleh Eisenhower Matrix. Quadrant dihitung runtime, tidak disimpan.
 
 ---
 
 ### repeat_type
 
-Menentukan pola pengulangan Todo.
+**Type**: varchar(20), default: `none`
 
-Possible values
-
-```
-none
-
-daily
-
-weekly
-
-monthly
-
-yearly
-
-interval
-```
+| Value | Description |
+|-------|-------------|
+| `none` | No repeat |
+| `daily` | Every day |
+| `weekly` | Selected days of week |
+| `monthly` | Selected day of month |
+| `yearly` | Selected month of year |
+| `interval` | Every N days/weeks/months/years |
 
 ---
 
-### interval_value
+### interval_value / interval_unit
 
-Digunakan hanya jika
+Digunakan jika `repeat_type = interval`.
 
-```
-repeat_type = interval
-```
+- `interval_value`: integer (e.g. 3)
+- `interval_unit`: day / week / month / year
 
-Contoh
-
-```
-3
-```
-
-Artinya
-
-```
-Setiap 3 bulan
-```
-
----
-
-### interval_unit
-
-Satuan interval.
-
-Possible values
-
-```
-day
-
-week
-
-month
-
-year
-```
+Contoh: `interval_value=3, interval_unit=month` → setiap 3 bulan.
 
 ---
 
 ### days_of_week
 
-Digunakan hanya untuk repeat mingguan.
-
-Format
+Digunakan jika `repeat_type = weekly`. Format: JSON Array.
 
 ```
-JSON Array
+[1,3,5]  → Senin, Rabu, Jumat
 ```
 
-Contoh
-
-```
-[1,3,5]
-```
-
-Artinya
-
-```
-Senin
-
-Rabu
-
-Jumat
-```
+Scheduler mencari hari berikutnya dari daftar ini, bukan `addWeek()`.
 
 ---
 
 ### day_of_month
 
-Digunakan untuk repeat bulanan.
-
-Contoh
-
-```
-15
-```
-
-Artinya
-
-```
-Setiap tanggal 15
-```
+Digunakan untuk repeat bulanan. Contoh: `15` → setiap tanggal 15.
 
 ---
 
 ### month_of_year
 
-Digunakan untuk repeat tahunan.
-
-Contoh
-
-```
-7
-```
-
-Artinya
-
-```
-Juli
-```
+Digunakan untuk repeat tahunan. Contoh: `7` → Juli.
 
 ---
 
 ### repeat_anchor
 
-Menentukan dasar perhitungan repeat berikutnya.
+**Type**: varchar(20), default: `schedule`
 
-Possible values
-
-```
-schedule
-
-completion
-```
-
-schedule
-
-Repeat dihitung berdasarkan jadwal sebelumnya.
-
-completion
-
-Repeat dihitung berdasarkan tanggal penyelesaian.
+| Value | Behavior |
+|-------|----------|
+| `schedule` | Next due dihitung dari jadwal sebelumnya |
+| `completion` | Next due dihitung dari tanggal selesai |
 
 ---
 
-### end_type
+### end_type / end_date / end_count
 
-Menentukan kapan repeat berhenti.
+| end_type | Required Field | Behavior |
+|----------|---------------|----------|
+| `never` | — | Repeat forever |
+| `date` | `end_date` | Stop after this date |
+| `count` | `end_count` | Stop after N completions |
 
-Possible values
-
-```
-never
-
-date
-
-count
-```
-
----
-
-### end_date
-
-Digunakan jika
-
-```
-end_type = date
-```
-
-Repeat berhenti setelah tanggal tersebut.
-
----
-
-### end_count
-
-Digunakan jika
-
-```
-end_type = count
-```
-
-Repeat berhenti setelah selesai sebanyak N kali.
+Form hanya menampilkan field yang relevan (show/hide via JS).
 
 ---
 
 ### completed_count
 
-Jumlah penyelesaian Todo.
+**Type**: integer, default: 0
 
-Scheduler menggunakan field ini untuk menentukan apakah repeat masih berlaku.
+Jumlah penyelesaian Todo. Digunakan scheduler untuk mengecek `end_type = count`.
 
 ---
 
 ### next_due_at
 
-Tanggal Todo berikutnya muncul.
+**Type**: timestamp (nullable)
 
-Nilai ini dihitung oleh Scheduler.
+Tanggal Todo berikutnya muncul. Dihitung oleh Scheduler.
 
-UI menggunakan field ini untuk menampilkan Today's Todo.
+Jika NULL dan `completed_count = 0`, todo muncul di dashboard sebagai todo baru.
 
 ---
 
 ### reminder_time
 
-Jam reminder.
+**Type**: varchar(5) (nullable)
 
-Opsional.
-
-Contoh
-
-```
-08:00
-
-20:30
-```
+Jam reminder. Format: `08:00`, `20:30`. (Fitur akan datang)
 
 ---
 
 ### paused_until
 
-Jika Todo di-pause sementara.
+**Type**: timestamp (nullable)
 
-Setelah waktu ini Scheduler akan mengaktifkan kembali Todo.
-
----
-
-### created_at
-
-Timestamp Todo dibuat.
+Jika Todo di-pause sementara. Setelah waktu ini scheduler akan mengaktifkan kembali Todo.
 
 ---
 
-### updated_at
+### created_at / updated_at
 
-Timestamp terakhir Todo diperbarui.
+Timestamp standar.
 
 ---
 
@@ -525,81 +277,41 @@ Timestamp terakhir Todo diperbarui.
 
 ## Purpose
 
-Menyimpan riwayat penyelesaian Todo.
-
-Todo menyimpan aturan.
-
-History menyimpan hasil eksekusi.
-
-Satu Todo dapat memiliki banyak History.
-
----
+Menyimpan riwayat penyelesaian Todo. Satu Todo dapat memiliki banyak History.
 
 ## Fields
 
-### id
-
-Primary Key.
-
----
-
-### todo_id
-
-Foreign Key ke Todo.
-
-Menunjukkan Todo mana yang diselesaikan.
-
----
-
-### due_at
-
-Jadwal seharusnya Todo dikerjakan.
-
-Contoh
-
-```
-22 Juli
-```
+| Field | Type | Description |
+|-------|------|-------------|
+| `id` | bigint | Primary Key |
+| `todo_id` | bigint FK | Foreign Key ke Todo |
+| `due_at` | timestamp | Jadwal seharusnya |
+| `completed_at` | timestamp | Tanggal selesai |
+| `skipped_at` | timestamp | Tanggal dilewati |
+| `completion_note` | text | Catatan penyelesaian |
+| `created_at` | timestamp | Waktu riwayat dibuat |
+| `updated_at` | timestamp | Timestamp update |
 
 ---
 
-### completed_at
+# System Tables
 
-Tanggal Todo benar-benar selesai.
+### sessions
 
-Contoh
+Digunakan oleh Laravel session handler. Tidak terkait user.
 
-```
-25 Juli
-```
+| Field | Type |
+|-------|------|
+| `id` | varchar (PK) |
+| `user_id` | varchar (nullable) — tidak digunakan |
+| `ip_address` | varchar(45) |
+| `user_agent` | text |
+| `payload` | longtext |
+| `last_activity` | integer |
 
----
+### cache / cache_locks / jobs / job_batches / failed_jobs
 
-### skipped_at
-
-Tanggal Todo dilewati.
-
-Digunakan jika user memilih Skip.
-
----
-
-### completion_note
-
-Catatan ketika menyelesaikan Todo.
-
-Contoh
-
-```
-Servis dilakukan di AHASS.
-
-Mengganti oli dan filter.
-```
-
----
-
-### created_at
-
-Timestamp riwayat dibuat.
+Default Laravel tables. Tidak ada customisasi.
 
 ---
 
@@ -607,19 +319,17 @@ Timestamp riwayat dibuat.
 
 ```
 Notes
-
 1
-│
 │
 ├────────────── N Todos
 
 Todos
-
 1
-│
 │
 ├────────────── N Todo Histories
 ```
+
+Tidak ada tabel Users. Aplikasi single-user tanpa autentikasi.
 
 ---
 

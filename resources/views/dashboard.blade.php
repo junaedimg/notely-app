@@ -9,18 +9,33 @@
             <span class="font-label-sm text-label-sm text-secondary uppercase tracking-widest mb-1 block">Workspace</span>
             <h2 class="font-headline-lg text-headline-lg-mobile md:text-headline-lg text-on-surface">Focus</h2>
         </div>
-        <div class="flex items-center gap-3 bg-surface-container-lowest border border-outline-variant rounded-xl px-4 py-3">
-            <span class="material-symbols-outlined text-primary text-sm">calendar_today</span>
-            <form method="POST" action="{{ route('dashboard.set-today') }}" class="flex items-center gap-2">
-                @csrf
-                <input type="date" name="date" value="{{ $currentDate }}"
-                    class="font-body-md text-sm bg-transparent border-none outline-none text-on-surface [&::-webkit-calendar-picker-indicator]:opacity-50 [&::-webkit-calendar-picker-indicator]:cursor-pointer">
-                <button type="submit" class="bg-primary text-on-primary px-3 py-1 rounded-lg font-label-sm text-[11px] hover:brightness-110 active:scale-95 transition-all">Set</button>
-            </form>
-            <form method="POST" action="{{ route('dashboard.reset-today') }}" class="flex">
-                @csrf
-                <button type="submit" class="text-secondary font-label-sm text-[11px] hover:text-primary active:scale-95 transition-all px-2 py-1" title="Reset to real today">Reset</button>
-            </form>
+        <div class="bg-surface-container-lowest border border-outline-variant rounded-xl px-4 py-3 w-full md:w-auto">
+            <div class="flex flex-wrap items-center gap-2">
+                <span class="material-symbols-outlined text-primary text-sm shrink-0">calendar_today</span>
+                <form method="POST" action="{{ route('dashboard.set-today') }}" class="flex items-center gap-1 flex-1 md:flex-none min-w-0" id="date-form">
+                    @csrf
+                    <button type="button" onclick="adjustDate(-1)" class="material-symbols-outlined text-secondary hover:text-primary active:scale-90 transition-all p-1 text-sm shrink-0" title="Previous day">chevron_left</button>
+                    <input type="date" name="date" id="date-input" value="{{ $currentDate }}"
+                        class="font-body-md text-sm bg-transparent border-none outline-none text-on-surface w-0 min-w-[100px] flex-1 md:flex-none md:w-[130px] text-center [&::-webkit-calendar-picker-indicator]:opacity-50 [&::-webkit-calendar-picker-indicator]:cursor-pointer">
+                    <button type="button" onclick="adjustDate(1)" class="material-symbols-outlined text-secondary hover:text-primary active:scale-90 transition-all p-1 text-sm shrink-0" title="Next day">chevron_right</button>
+                </form>
+                <script>
+                    function adjustDate(days) {
+                        const input = document.getElementById('date-input');
+                        const d = new Date(input.value + 'T12:00:00');
+                        d.setDate(d.getDate() + days);
+                        input.value = d.toISOString().split('T')[0];
+                        document.getElementById('date-form').submit();
+                    }
+                </script>
+            </div>
+            <div class="flex items-center gap-2 mt-2 md:mt-0 md:ml-auto">
+                <button type="submit" form="date-form" class="bg-primary text-on-primary px-3 py-1 rounded-lg font-label-sm text-[11px] hover:brightness-110 active:scale-95 transition-all">Set</button>
+                <form method="POST" action="{{ route('dashboard.reset-today') }}" class="flex">
+                    @csrf
+                    <button type="submit" class="text-secondary font-label-sm text-[11px] hover:text-primary active:scale-95 transition-all px-2 py-1" title="Reset to real today">Reset</button>
+                </form>
+            </div>
         </div>
     </div>
 </section>

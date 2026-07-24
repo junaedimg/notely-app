@@ -13,11 +13,7 @@
         <div class="flex items-center gap-4">
             <a href="{{ route('dashboard') }}" class="font-headline-md text-headline-md font-bold text-primary">Notely</a>
         </div>
-        <div class="flex items-center gap-2">
-            <div class="w-10 h-10 rounded-xl bg-surface-container-highest border border-outline-variant overflow-hidden flex items-center justify-center text-on-surface-variant font-headline-md">
-                <span class="material-symbols-outlined text-primary">person</span>
-            </div>
-        </div>
+        <div class="flex items-center gap-2"></div>
     </header>
 
     <main class="pt-24 pb-32 max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop min-h-screen">
@@ -44,6 +40,7 @@
     </nav>
 
     <script>
+        const currentUrl = window.location.pathname + window.location.search;
         document.querySelectorAll('[data-complete]').forEach(btn => {
             btn.addEventListener('click', function(e) {
                 e.preventDefault();
@@ -51,7 +48,7 @@
                 const form = document.createElement('form');
                 form.method = 'POST';
                 form.action = this.dataset.action;
-                form.innerHTML = '@csrf' + (note ? '<input name="completion_note" value="' + note + '">' : '');
+                form.innerHTML = '@csrf' + (note ? '<input name="completion_note" value="' + note + '">' : '') + '<input name="_redirect" value="' + currentUrl + '">';
                 document.body.appendChild(form);
                 form.submit();
             });
@@ -63,7 +60,7 @@
                     const form = document.createElement('form');
                     form.method = 'POST';
                     form.action = this.dataset.action;
-                    form.innerHTML = '@csrf';
+                    form.innerHTML = '@csrf' + '<input name="_redirect" value="' + currentUrl + '">';
                     document.body.appendChild(form);
                     form.submit();
                 }

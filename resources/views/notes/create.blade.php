@@ -32,6 +32,7 @@
 
         <div class="flex items-center gap-6">
             <label class="flex items-center gap-3 cursor-pointer">
+                <input type="hidden" name="is_pinned" value="0">
                 <input type="checkbox" name="is_pinned" value="1" class="w-5 h-5 rounded border-outline-variant text-primary focus:ring-primary">
                 <span class="font-body-md text-on-surface">Pin this note</span>
             </label>

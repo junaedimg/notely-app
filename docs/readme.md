@@ -16,8 +16,7 @@ The docs are organized by domain, not by file type. Start with the module you ne
 | 2 | [TODOS.md](TODOS.md) | Todos module — representing actions, scheduling, priorities |
 | 3 | [SCHEDULER.md](SCHEDULER.md) | Recurring task scheduling logic |
 | 4 | [DATABASE.md](DATABASE.md) | Database architecture and relationships |
-| 5 | [API.md](API.md) | API reference (coming soon) |
-| 6 | [ROADMAP.md](ROADMAP.md) | Current and future scope |
+| 5 | [ROADMAP.md](ROADMAP.md) | Current and future scope |
 
 ---
 
@@ -26,6 +25,7 @@ The docs are organized by domain, not by file type. Start with the module you ne
 - **Computed fields** are never stored in the database — they are calculated at runtime (e.g., Eisenhower quadrant, next occurrence).
 - **Single Responsibility** — each module owns one concern and does not leak into others.
 - **Data is normalized** — rules, execution records, and calculations are kept separate.
+- **Single user** — no authentication, no login/register, no user model.
 
 ---
 
@@ -54,4 +54,4 @@ When asked to implement or modify a feature:
 
 ## Project Status
 
-This is a **design-phase project**. Most code has not been written. These docs are the source of truth for intended behavior.
+This is a **partially implemented project**. Most core features (Notes CRUD, Todos CRUD, Scheduler, Eisenhower Matrix, History) are built. Auth/user layer has been removed — this is a single-user application.

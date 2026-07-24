@@ -19,6 +19,11 @@
                 @endif
             </div>
             <div class="flex items-center gap-2">
+                <form method="POST" action="{{ route('notes.toggle-pin', $note) }}">
+                    @csrf
+                    <input type="hidden" name="_redirect" value="{{ request()->url() }}">
+                    <button class="material-symbols-outlined p-2 hover:bg-surface-container-low rounded-full transition-all active:scale-90 {{ $note->is_pinned ? 'text-primary' : 'text-secondary' }}" style="{{ $note->is_pinned ? 'font-variation-settings: \'FILL\' 1;' : '' }}">push_pin</button>
+                </form>
                 <a href="{{ route('notes.edit', $note) }}" class="material-symbols-outlined text-secondary p-2 hover:bg-surface-container-low rounded-full">edit</a>
                 <form method="POST" action="{{ route('notes.destroy', $note) }}" onsubmit="return confirm('Delete this note?')">
                     @csrf @method('DELETE')

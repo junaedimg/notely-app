@@ -67,4 +67,11 @@ class NoteController extends Controller
 
         return redirect()->route('notes.index');
     }
+
+    public function togglePin(Request $request, Note $note): RedirectResponse
+    {
+        $note->update(['is_pinned' => !$note->is_pinned]);
+
+        return redirect()->to($request->input('_redirect', route('notes.index')));
+    }
 }

@@ -51,20 +51,28 @@
             <label class="flex items-center gap-3 cursor-pointer">
                 <input type="checkbox" name="is_important" value="1" {{ $todo->is_important ? 'checked' : '' }} class="w-5 h-5 rounded border-outline-variant text-primary focus:ring-primary">
                 <span class="font-body-md text-on-surface">Important</span>
+                <x-tooltip position="left-1/2 -translate-x-1/2">Pekerjaan berdampak besar
+Contoh: bayar cicilan, laporan pajak</x-tooltip>
             </label>
             <label class="flex items-center gap-3 cursor-pointer">
                 <input type="checkbox" name="is_urgent" value="1" {{ $todo->is_urgent ? 'checked' : '' }} class="w-5 h-5 rounded border-outline-variant text-primary focus:ring-primary">
                 <span class="font-body-md text-on-surface">Urgent</span>
+                <x-tooltip position="left-1/2 -translate-x-1/2">Pekerjaan butuh perhatian segera
+Contoh: deadline hari ini, darurat</x-tooltip>
             </label>
         </div>
 
         <div class="border-t border-outline-variant pt-6">
             <h3 class="font-headline-md text-headline-md text-on-surface mb-4">Repeat Settings</h3>
 
-            <div class="grid grid-cols-2 gap-4">
-                <div>
-                    <label class="font-label-sm text-label-sm text-secondary uppercase tracking-widest mb-2 block">Repeat</label>
-                    <select name="repeat_type" class="w-full bg-surface-container-low border border-outline-variant rounded-lg px-4 py-3 font-body-md text-on-surface focus:outline-none focus:border-primary">
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                <div class="col-span-2">
+                    <label class="font-label-sm text-label-sm text-secondary uppercase tracking-widest mb-2 block">
+                        Repeat
+                        <x-tooltip position="left-1/2 -translate-x-1/2">Seberapa sering todo muncul ulang
+Contoh: daily = tiap hari, weekly = tiap minggu</x-tooltip>
+                    </label>
+                    <select name="repeat_type" id="repeat-type" onchange="toggleRepeatFields()" class="w-full bg-surface-container-low border border-outline-variant rounded-lg px-4 py-3 font-body-md text-on-surface focus:outline-none focus:border-primary">
                         <option value="none" @if($todo->repeat_type === 'none') selected @endif>No repeat</option>
                         <option value="daily" @if($todo->repeat_type === 'daily') selected @endif>Daily</option>
                         <option value="weekly" @if($todo->repeat_type === 'weekly') selected @endif>Weekly</option>
@@ -75,23 +83,103 @@
                 </div>
 
                 <div>
-                    <label class="font-label-sm text-label-sm text-secondary uppercase tracking-widest mb-2 block">Anchor</label>
+                    <label class="font-label-sm text-label-sm text-secondary uppercase tracking-widest mb-2 block">
+                        Anchor
+                        <x-tooltip>Schedule = repeat berdasarkan jadwal
+Bills: due tgl 5, selesai tgl 7 → next due tgl 5 bulan depan
+
+Completion = repeat berdasarkan selesai
+Oli: ganti tgl 5, selesai tgl 7 → next ganti +3 bulan dari tgl 7</x-tooltip>
+                    </label>
                     <select name="repeat_anchor" class="w-full bg-surface-container-low border border-outline-variant rounded-lg px-4 py-3 font-body-md text-on-surface focus:outline-none focus:border-primary">
-                        <option value="schedule" @if($todo->repeat_anchor === 'schedule') selected @endif>Schedule based</option>
-                        <option value="completion" @if($todo->repeat_anchor === 'completion') selected @endif>Completion based</option>
+                        <option value="schedule" @if($todo->repeat_anchor === 'schedule') selected @endif>Schedule</option>
+                        <option value="completion" @if($todo->repeat_anchor === 'completion') selected @endif>Completion</option>
                     </select>
                 </div>
             </div>
 
+            {{-- Interval --}}
+            <div id="interval-fields" class="grid grid-cols-2 gap-4 mt-4 @if($todo->repeat_type !== 'interval') hidden @endif">
+                <div>
+                    <label class="font-label-sm text-label-sm text-secondary uppercase tracking-widest mb-2 block">
+                        Every
+                        <x-tooltip>Todo muncul setiap X unit waktu
+Contoh: 3 bulan sekali → isi Every=3, Unit=Months</x-tooltip>
+                    </label>
+                    <input type="number" name="interval_value" value="{{ old('interval_value', $todo->interval_value) }}" min="1"
+                        class="w-full bg-surface-container-low border border-outline-variant rounded-lg px-4 py-3 font-body-md text-on-surface focus:outline-none focus:border-primary">
+                </div>
+                <div>
+                    <label class="font-label-sm text-label-sm text-secondary uppercase tracking-widest mb-2 block">Unit</label>
+                    <select name="interval_unit" class="w-full bg-surface-container-low border border-outline-variant rounded-lg px-4 py-3 font-body-md text-on-surface focus:outline-none focus:border-primary">
+                        <option value="day" @if($todo->interval_unit === 'day') selected @endif>Days</option>
+                        <option value="week" @if($todo->interval_unit === 'week') selected @endif>Weeks</option>
+                        <option value="month" @if($todo->interval_unit === 'month') selected @endif>Months</option>
+                        <option value="year" @if($todo->interval_unit === 'year') selected @endif>Years</option>
+                    </select>
+                </div>
+            </div>
+
+            {{-- Weekly --}}
+            <div id="weekly-fields" class="mt-4 @if($todo->repeat_type !== 'weekly') hidden @endif">
+                <label class="font-label-sm text-label-sm text-secondary uppercase tracking-widest mb-2 block">
+                    On days
+                    <x-tooltip>Todo muncul di hari yang dipilih
+Contoh: pilih Senin & Rabu → muncul tiap Senin & Rabu</x-tooltip>
+                </label>
+                <div class="flex flex-wrap gap-2">
+                    @php $dow = old('days_of_week', $todo->days_of_week ?? []); @endphp
+                    @foreach(['Mon'=>'1','Tue'=>'2','Wed'=>'3','Thu'=>'4','Fri'=>'5','Sat'=>'6','Sun'=>'7'] as $label=>$val)
+                    <label class="flex items-center gap-2 bg-surface-container-low border border-outline-variant rounded-lg px-4 py-2 cursor-pointer hover:border-primary transition-colors has-[:checked]:bg-primary-fixed has-[:checked]:border-primary has-[:checked]:text-primary">
+                        <input type="checkbox" name="days_of_week[]" value="{{ $val }}" @if(in_array($val, $dow)) checked @endif class="sr-only">
+                        <span class="font-body-md text-sm">{{ $label }}</span>
+                    </label>
+                    @endforeach
+                </div>
+            </div>
+
+            {{-- Monthly --}}
+            <div id="monthly-fields" class="mt-4 @if($todo->repeat_type !== 'monthly') hidden @endif">
+                <label class="font-label-sm text-label-sm text-secondary uppercase tracking-widest mb-2 block">
+                    Day of month
+                    <x-tooltip>Todo muncul di tanggal ini setiap bulan
+Contoh: isi 15 → muncul tiap tanggal 15</x-tooltip>
+                </label>
+                <input type="number" name="day_of_month" value="{{ old('day_of_month', $todo->day_of_month) }}" min="1" max="31"
+                    class="w-full max-w-[120px] bg-surface-container-low border border-outline-variant rounded-lg px-4 py-3 font-body-md text-on-surface focus:outline-none focus:border-primary">
+            </div>
+
+            {{-- Yearly --}}
+            <div id="yearly-fields" class="mt-4 @if($todo->repeat_type !== 'yearly') hidden @endif">
+                <label class="font-label-sm text-label-sm text-secondary uppercase tracking-widest mb-2 block">
+                    Month of year
+                    <x-tooltip>Todo muncul di bulan ini setiap tahun
+Contoh: pilih July → muncul tiap bulan July</x-tooltip>
+                </label>
+                <select name="month_of_year" class="w-full max-w-[200px] bg-surface-container-low border border-outline-variant rounded-lg px-4 py-3 font-body-md text-on-surface focus:outline-none focus:border-primary">
+                    @foreach(['January'=>'1','February'=>'2','March'=>'3','April'=>'4','May'=>'5','June'=>'6','July'=>'7','August'=>'8','September'=>'9','October'=>'10','November'=>'11','December'=>'12'] as $label=>$val)
+                    <option value="{{ $val }}" @if(old('month_of_year', $todo->month_of_year) == $val) selected @endif>{{ $label }}</option>
+                    @endforeach
+                </select>
+            </div>
+
             <div class="grid grid-cols-2 gap-4 mt-4">
                 <div>
-                    <label class="font-label-sm text-label-sm text-secondary uppercase tracking-widest mb-2 block">First due date</label>
+                    <label class="font-label-sm text-label-sm text-secondary uppercase tracking-widest mb-2 block">
+                        First due date
+                        <x-tooltip>Kapan todo pertama muncul di dashboard
+Kosongkan → muncul hari ini juga</x-tooltip>
+                    </label>
                     <input type="datetime-local" name="next_due_at" value="{{ old('next_due_at', $todo->next_due_at ? $todo->next_due_at->format('Y-m-d\TH:i') : '') }}"
                         class="w-full bg-surface-container-low border border-outline-variant rounded-lg px-4 py-3 font-body-md text-on-surface focus:outline-none focus:border-primary">
                 </div>
 
                 <div>
-                    <label class="font-label-sm text-label-sm text-secondary uppercase tracking-widest mb-2 block">Reminder time</label>
+                    <label class="font-label-sm text-label-sm text-secondary uppercase tracking-widest mb-2 block">
+                        Reminder time
+                        <x-tooltip>Jam notifikasi pengingat
+Fitur akan datang di versi selanjutnya</x-tooltip>
+                    </label>
                     <input type="time" name="reminder_time" value="{{ old('reminder_time', $todo->reminder_time) }}"
                         class="w-full bg-surface-container-low border border-outline-variant rounded-lg px-4 py-3 font-body-md text-on-surface focus:outline-none focus:border-primary">
                 </div>
@@ -99,27 +187,55 @@
 
             <div class="grid grid-cols-2 gap-4 mt-4">
                 <div>
-                    <label class="font-label-sm text-label-sm text-secondary uppercase tracking-widest mb-2 block">End type</label>
-                    <select name="end_type" class="w-full bg-surface-container-low border border-outline-variant rounded-lg px-4 py-3 font-body-md text-on-surface focus:outline-none focus:border-primary">
+                    <label class="font-label-sm text-label-sm text-secondary uppercase tracking-widest mb-2 block">
+                        End type
+                        <x-tooltip>Never = repeat tidak pernah berhenti
+End date = berhenti di tanggal tertentu
+After N times = berhenti setelah N kali selesai</x-tooltip>
+                    </label>
+                    <select name="end_type" id="end-type" onchange="toggleEndFields()" class="w-full bg-surface-container-low border border-outline-variant rounded-lg px-4 py-3 font-body-md text-on-surface focus:outline-none focus:border-primary">
                         <option value="never" @if($todo->end_type === 'never') selected @endif>Never</option>
                         <option value="date" @if($todo->end_type === 'date') selected @endif>End date</option>
                         <option value="count" @if($todo->end_type === 'count') selected @endif>After N times</option>
                     </select>
                 </div>
-
-                <div>
-                    <label class="font-label-sm text-label-sm text-secondary uppercase tracking-widest mb-2 block">End date</label>
-                    <input type="date" name="end_date" value="{{ old('end_date', $todo->end_date ? $todo->end_date->format('Y-m-d') : '') }}"
-                        class="w-full bg-surface-container-low border border-outline-variant rounded-lg px-4 py-3 font-body-md text-on-surface focus:outline-none focus:border-primary">
-                </div>
             </div>
 
-            <div class="mt-4">
-                <label class="font-label-sm text-label-sm text-secondary uppercase tracking-widest mb-2 block">End after N completions</label>
+            <div id="end-date-fields" class="mt-4 @if($todo->end_type !== 'date') hidden @endif">
+                <label class="font-label-sm text-label-sm text-secondary uppercase tracking-widest mb-2 block">
+                    End date
+                    <x-tooltip>Repeat berhenti otomatis setelah tanggal ini
+Contoh: isi 2026-12-31 → berhenti akhir tahun 2026</x-tooltip>
+                </label>
+                <input type="date" name="end_date" value="{{ old('end_date', $todo->end_date ? $todo->end_date->format('Y-m-d') : '') }}"
+                    class="w-full max-w-[240px] bg-surface-container-low border border-outline-variant rounded-lg px-4 py-3 font-body-md text-on-surface focus:outline-none focus:border-primary">
+            </div>
+
+            <div id="end-count-fields" class="mt-4 @if($todo->end_type !== 'count') hidden @endif">
+                <label class="font-label-sm text-label-sm text-secondary uppercase tracking-widest mb-2 block">
+                    End after N completions
+                    <x-tooltip>Repeat berhenti setelah N kali selesai
+Contoh: isi 6 → berhenti setelah 6 kali</x-tooltip>
+                </label>
                 <input type="number" name="end_count" value="{{ old('end_count', $todo->end_count) }}" min="1"
-                    class="w-full bg-surface-container-low border border-outline-variant rounded-lg px-4 py-3 font-body-md text-on-surface focus:outline-none focus:border-primary">
+                    class="w-full max-w-[120px] bg-surface-container-low border border-outline-variant rounded-lg px-4 py-3 font-body-md text-on-surface focus:outline-none focus:border-primary">
             </div>
         </div>
+
+        <script>
+            function toggleRepeatFields() {
+                const val = document.getElementById('repeat-type').value;
+                document.getElementById('interval-fields').classList.toggle('hidden', val !== 'interval');
+                document.getElementById('weekly-fields').classList.toggle('hidden', val !== 'weekly');
+                document.getElementById('monthly-fields').classList.toggle('hidden', val !== 'monthly');
+                document.getElementById('yearly-fields').classList.toggle('hidden', val !== 'yearly');
+            }
+            function toggleEndFields() {
+                const val = document.getElementById('end-type').value;
+                document.getElementById('end-date-fields').classList.toggle('hidden', val !== 'date');
+                document.getElementById('end-count-fields').classList.toggle('hidden', val !== 'count');
+            }
+        </script>
 
         <div class="flex gap-4 pt-4">
             <button type="submit" class="bg-primary text-on-primary px-8 py-3 rounded-lg font-label-sm text-label-sm hover:brightness-110 active:scale-95 transition-all">Update Todo</button>

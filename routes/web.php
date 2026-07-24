@@ -11,6 +11,7 @@ Route::post('dashboard/set-today', [DashboardController::class, 'setToday'])->na
 Route::post('dashboard/reset-today', [DashboardController::class, 'resetToday'])->name('dashboard.reset-today');
 
 Route::resource('notes', NoteController::class);
+Route::post('notes/{note}/toggle-pin', [NoteController::class, 'togglePin'])->name('notes.toggle-pin');
 
 Route::resource('todos', TodoController::class);
 Route::post('todos/{todo}/complete', [TodoController::class, 'complete'])->name('todos.complete');
