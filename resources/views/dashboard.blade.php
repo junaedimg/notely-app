@@ -9,6 +9,19 @@
             <span class="font-label-sm text-label-sm text-secondary uppercase tracking-widest mb-1 block">Workspace</span>
             <h2 class="font-headline-lg text-headline-lg-mobile md:text-headline-lg text-on-surface">Focus</h2>
         </div>
+        <div class="flex items-center gap-3 bg-surface-container-lowest border border-outline-variant rounded-xl px-4 py-3">
+            <span class="material-symbols-outlined text-primary text-sm">calendar_today</span>
+            <form method="POST" action="{{ route('dashboard.set-today') }}" class="flex items-center gap-2">
+                @csrf
+                <input type="date" name="date" value="{{ $currentDate }}"
+                    class="font-body-md text-sm bg-transparent border-none outline-none text-on-surface [&::-webkit-calendar-picker-indicator]:opacity-50 [&::-webkit-calendar-picker-indicator]:cursor-pointer">
+                <button type="submit" class="bg-primary text-on-primary px-3 py-1 rounded-lg font-label-sm text-[11px] hover:brightness-110 active:scale-95 transition-all">Set</button>
+            </form>
+            <form method="POST" action="{{ route('dashboard.reset-today') }}" class="flex">
+                @csrf
+                <button type="submit" class="text-secondary font-label-sm text-[11px] hover:text-primary active:scale-95 transition-all px-2 py-1" title="Reset to real today">Reset</button>
+            </form>
+        </div>
     </div>
 </section>
 

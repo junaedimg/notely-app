@@ -120,7 +120,7 @@ class TodoController extends Controller
         TodoHistory::create([
             'todo_id' => $todo->id,
             'due_at' => $todo->next_due_at,
-            'completed_at' => now(),
+            'completed_at' => simulated_today(),
             'completion_note' => $request->completion_note,
         ]);
 
@@ -137,7 +137,7 @@ class TodoController extends Controller
         TodoHistory::create([
             'todo_id' => $todo->id,
             'due_at' => $todo->next_due_at,
-            'skipped_at' => now(),
+            'skipped_at' => simulated_today(),
         ]);
 
         $todo->next_due_at = $this->calculateNextDue($todo);
@@ -153,8 +153,8 @@ class TodoController extends Controller
         }
 
         $anchor = $todo->repeat_anchor === 'completion'
-            ? now()
-            : ($todo->next_due_at ?? now());
+            ? simulated_today()
+            : ($todo->next_due_at ?? simulated_today());
 
         $next = match ($todo->repeat_type) {
             'daily' => $anchor->copy()->addDay(),

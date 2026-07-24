@@ -7,6 +7,8 @@ use App\Http\Controllers\TodoController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
+Route::post('dashboard/set-today', [DashboardController::class, 'setToday'])->name('dashboard.set-today');
+Route::post('dashboard/reset-today', [DashboardController::class, 'resetToday'])->name('dashboard.reset-today');
 
 Route::resource('notes', NoteController::class);
 
