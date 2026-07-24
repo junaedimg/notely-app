@@ -165,10 +165,10 @@ The quadrant is calculated automatically at runtime (computed attribute, never s
 
 | Important | Urgent | Quadrant | Label | Color |
 |-----------|--------|----------|-------|-------|
-| Yes | Yes | `do` | Kerjakan | 🔴 Merah |
-| Yes | No | `decide` | Jadwalkan | 🟡 Kuning |
-| No | Yes | `delegate` | Delegasikan | 🟢 Hijau |
-| No | No | `delete` | Hilangkan | 🔵 Biru |
+| Yes | Yes | `do` | Do | 🔴 Red |
+| Yes | No | `decide` | Decide | 🟡 Yellow |
+| No | Yes | `delegate` | Delegate | 🟢 Green |
+| No | No | `delete` | Delete | 🔵 Blue |
 
 ### Visual
 
