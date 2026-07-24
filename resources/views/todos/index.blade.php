@@ -61,52 +61,52 @@
     @endforelse
 </div>
 @else
-<div class="space-y-4">
+<div class="space-y-3">
     @forelse($todos as $todo)
-    <div class="bg-white p-5 border border-outline-variant rounded-lg shadow-sm hover:translate-x-1 transition-all group cursor-pointer"
+    <div class="bg-white p-4 border border-outline-variant rounded-lg shadow-sm hover:translate-x-0.5 transition-all group cursor-pointer"
          style="border-left: 4px solid {{ $todo->quadrant_color }};">
-        <div class="flex justify-between items-start mb-2">
+        <div class="flex justify-between items-start mb-1.5">
             <div class="flex gap-2">
                 <x-quadrant :quadrant="$todo->quadrant" />
             </div>
             @if($todo->repeat_type !== 'none')
             <div class="flex items-center gap-1 text-on-surface-variant group-hover:text-primary shrink-0">
-                <span class="material-symbols-outlined text-[16px]">refresh</span>
-                <span class="font-label-sm text-[10px] capitalize">{{ $todo->repeat_type }}</span>
+                <span class="material-symbols-outlined text-[14px]">refresh</span>
+                <span class="font-label-sm text-[9px] capitalize">{{ $todo->repeat_type }}</span>
             </div>
             @endif
         </div>
 
-        <h3 class="font-headline-md text-headline-md text-on-surface mb-1">{{ $todo->title }}</h3>
+        <h3 class="font-headline-md text-[15px] font-semibold text-on-surface mb-0.5">{{ $todo->title }}</h3>
         @if($todo->description)
-        <p class="text-on-surface-variant font-body-md mb-3 whitespace-pre-line">{{ Str::limit($todo->description, 120) }}</p>
+        <p class="text-on-surface-variant font-body-md text-[13px] mb-2 whitespace-pre-line">{{ Str::limit($todo->description, 100) }}</p>
         @endif
 
         @if($todo->note && !$todo->note->trashed())
-        <div class="mb-3">
+        <div class="mb-1.5">
             <a href="{{ route('notes.show', $todo->note) }}" class="inline-flex items-center gap-1 text-[10px] text-outline hover:text-primary transition-colors font-medium uppercase tracking-wider">
-                <span class="material-symbols-outlined text-[12px]">description</span>
+                <span class="material-symbols-outlined text-[11px]">description</span>
                 {{ $todo->note->title }}
             </a>
         </div>
         @endif
 
-        <div class="flex items-center gap-4 text-on-surface-variant font-label-sm">
+        <div class="flex items-center gap-3 text-on-surface-variant font-label-sm text-[11px]">
             @if($todo->next_due_at)
             <div class="flex items-center gap-1">
-                <span class="material-symbols-outlined text-[18px]">calendar_today</span>
+                <span class="material-symbols-outlined text-[15px]">calendar_today</span>
                 <span>{{ $todo->next_due_at->format('M d, g:i A') }}</span>
             </div>
             @endif
-            <div class="flex items-center gap-2 ml-auto">
+            <div class="flex items-center gap-1 ml-auto">
                 @if($todo->repeat_type !== 'none')
-                <button data-skip data-action="{{ route('todos.skip', $todo) }}" data-title="{{ $todo->title }}" class="material-symbols-outlined text-secondary text-[18px] p-1 hover:bg-surface-container-low rounded-full" title="Skip">skip_next</button>
+                <button data-skip data-action="{{ route('todos.skip', $todo) }}" data-title="{{ $todo->title }}" class="material-symbols-outlined text-secondary text-[16px] p-0.5 hover:bg-surface-container-low rounded-full" title="Skip">skip_next</button>
                 @endif
-                <button data-complete data-action="{{ route('todos.complete', $todo) }}" data-title="{{ $todo->title }}" class="material-symbols-outlined text-secondary text-[18px] p-1 hover:bg-primary-fixed rounded-full hover:text-primary" title="Complete">check_circle</button>
-                <a href="{{ route('todos.edit', $todo) }}" class="material-symbols-outlined text-secondary text-[18px] p-1 hover:bg-surface-container-low rounded-full">edit</a>
+                <button data-complete data-action="{{ route('todos.complete', $todo) }}" data-title="{{ $todo->title }}" class="material-symbols-outlined text-secondary text-[16px] p-0.5 hover:bg-primary-fixed rounded-full hover:text-primary" title="Complete">check_circle</button>
+                <a href="{{ route('todos.edit', $todo) }}" class="material-symbols-outlined text-secondary text-[16px] p-0.5 hover:bg-surface-container-low rounded-full">edit</a>
                 <form method="POST" action="{{ route('todos.destroy', $todo) }}" class="inline">
                     @csrf @method('DELETE')
-                    <button data-delete data-type="soft" data-title="{{ $todo->title }}" class="material-symbols-outlined text-secondary text-[18px] p-1 hover:bg-error-container rounded-full hover:text-error">delete</button>
+                    <button data-delete data-type="soft" data-title="{{ $todo->title }}" class="material-symbols-outlined text-secondary text-[16px] p-0.5 hover:bg-error-container rounded-full hover:text-error">delete</button>
                 </form>
             </div>
         </div>

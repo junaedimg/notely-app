@@ -41,34 +41,34 @@
             <a href="{{ route('todos.index') }}" class="text-primary font-label-sm text-label-sm hover:underline">Manage</a>
         </div>
     </div>
-    <div class="space-y-3 max-w-[720px]">
+    <div class="space-y-2.5 max-w-[720px]">
         @forelse($todayTodos as $todo)
-        <div class="bg-white p-5 border border-outline-variant rounded-lg shadow-sm hover:shadow-md transition-shadow group"
+        <div class="bg-white p-4 border border-outline-variant rounded-lg shadow-sm hover:shadow-md transition-shadow group"
              style="border-left: 4px solid {{ $todo->quadrant_color }};">
-            <div class="flex justify-between items-start mb-2">
+            <div class="flex justify-between items-start mb-1.5">
                 <div class="flex gap-2">
                     <x-quadrant :quadrant="$todo->quadrant" />
                 </div>
                 @if($todo->repeat_type !== 'none')
                 <div class="flex items-center gap-1 text-on-surface-variant group-hover:text-primary shrink-0">
-                    <span class="material-symbols-outlined text-[16px]">refresh</span>
-                    <span class="font-label-sm text-[10px] capitalize">{{ $todo->repeat_type }}</span>
+                    <span class="material-symbols-outlined text-[14px]">refresh</span>
+                    <span class="font-label-sm text-[9px] capitalize">{{ $todo->repeat_type }}</span>
                 </div>
                 @endif
             </div>
 
-            <h3 class="font-headline-md text-headline-md text-on-surface mb-1">{{ $todo->title }}</h3>
+            <h3 class="font-headline-md text-[15px] font-semibold text-on-surface mb-1">{{ $todo->title }}</h3>
 
-            <div class="flex items-center gap-4 text-on-surface-variant font-label-sm">
+            <div class="flex items-center gap-3 text-on-surface-variant font-label-sm text-[11px]">
                 @if($todo->next_due_at)
                 <div class="flex items-center gap-1">
-                    <span class="material-symbols-outlined text-[18px]">calendar_today</span>
+                    <span class="material-symbols-outlined text-[15px]">calendar_today</span>
                     <span>{{ $todo->next_due_at->format('M d, g:i A') }}</span>
                 </div>
                 @endif
-                <div class="flex items-center gap-2 ml-auto">
-                    <button data-skip data-action="{{ route('todos.skip', $todo) }}" data-title="{{ $todo->title }}" class="material-symbols-outlined text-secondary text-[18px] p-1 hover:bg-surface-container-low rounded-full" title="Skip">skip_next</button>
-                    <button data-complete data-action="{{ route('todos.complete', $todo) }}" data-title="{{ $todo->title }}" class="material-symbols-outlined text-secondary text-[18px] p-1 hover:bg-primary-fixed rounded-full hover:text-primary" title="Complete">check_circle</button>
+                <div class="flex items-center gap-1 ml-auto">
+                    <button data-skip data-action="{{ route('todos.skip', $todo) }}" data-title="{{ $todo->title }}" class="material-symbols-outlined text-secondary text-[16px] p-0.5 hover:bg-surface-container-low rounded-full" title="Skip">skip_next</button>
+                    <button data-complete data-action="{{ route('todos.complete', $todo) }}" data-title="{{ $todo->title }}" class="material-symbols-outlined text-secondary text-[16px] p-0.5 hover:bg-primary-fixed rounded-full hover:text-primary" title="Complete">check_circle</button>
                 </div>
             </div>
         </div>
