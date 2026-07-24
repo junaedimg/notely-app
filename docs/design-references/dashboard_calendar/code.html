@@ -1,0 +1,498 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>Notely - Focused Workspace</title>
+    <!-- Fonts -->
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&amp;family=Geist:wght@400;500;600;700;800&amp;display=swap"
+        rel="stylesheet" />
+    <!-- Material Symbols -->
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+        rel="stylesheet" />
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <!-- Design System Implementation -->
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "primary-fixed": "#e1e0ff",
+                        "error-container": "#ffdad6",
+                        "surface-container": "#f0ecf5",
+                        "on-primary-container": "#9da1ff",
+                        "secondary": "#5d5f5c",
+                        "secondary-container": "#e2e3df",
+                        "on-surface-variant": "#464652",
+                        "on-primary-fixed": "#04006d",
+                        "primary-container": "#2e3192",
+                        "on-primary": "#ffffff",
+                        "surface-container-low": "#f5f2fb",
+                        "primary": "#15157d",
+                        "background": "#fcf8ff",
+                        "on-tertiary-fixed": "#1c1b1b",
+                        "surface-dim": "#dbd9e1",
+                        "secondary-fixed": "#e2e3df",
+                        "primary-fixed-dim": "#c0c1ff",
+                        "surface-bright": "#fcf8ff",
+                        "outline-variant": "#c7c5d4",
+                        "on-secondary-container": "#636562",
+                        "on-error": "#ffffff",
+                        "surface-variant": "#e4e1ea",
+                        "on-tertiary": "#ffffff",
+                        "surface": "#fcf8ff",
+                        "on-surface": "#1b1b21",
+                        "on-secondary": "#ffffff",
+                        "on-error-container": "#93000a",
+                        "on-tertiary-container": "#aba9a9",
+                        "inverse-on-surface": "#f2eff8",
+                        "tertiary-container": "#3f3e3e",
+                        "tertiary-fixed": "#e5e2e1",
+                        "surface-container-highest": "#e4e1ea",
+                        "on-secondary-fixed": "#1a1c1a",
+                        "surface-tint": "#4f54b4",
+                        "on-secondary-fixed-variant": "#454745",
+                        "on-background": "#1b1b21",
+                        "inverse-surface": "#303036",
+                        "on-primary-fixed-variant": "#373a9b",
+                        "error": "#ba1a1a",
+                        "on-tertiary-fixed-variant": "#474746",
+                        "tertiary-fixed-dim": "#c8c6c5",
+                        "secondary-fixed-dim": "#c6c7c3",
+                        "outline": "#777683",
+                        "tertiary": "#292828",
+                        "surface-container-high": "#eae7f0",
+                        "surface-container-lowest": "#ffffff",
+                        "inverse-primary": "#c0c1ff"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "spacing": {
+                        "unit": "8px",
+                        "margin-mobile": "16px",
+                        "margin-desktop": "40px",
+                        "container-max": "1200px",
+                        "gutter": "24px"
+                    },
+                    "fontFamily": {
+                        "headline-md": ["Geist"],
+                        "body-md": ["Inter"],
+                        "headline-lg-mobile": ["Geist"],
+                        "body-lg": ["Inter"],
+                        "label-sm": ["Geist"],
+                        "headline-lg": ["Geist"]
+                    },
+                    "fontSize": {
+                        "headline-md": ["20px", { "lineHeight": "28px", "fontWeight": "500" }],
+                        "body-md": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+                        "headline-lg-mobile": ["24px", { "lineHeight": "32px", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+                        "body-lg": ["18px", { "lineHeight": "32px", "fontWeight": "400" }],
+                        "label-sm": ["12px", { "lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "600" }],
+                        "headline-lg": ["32px", { "lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "600" }]
+                    }
+                },
+            },
+        }
+    </script>
+    <style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+
+        .hide-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+
+        .hide-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+    </style>
+</head>
+
+<body
+    class="bg-background font-body-md text-on-surface selection:bg-primary-container selection:text-on-primary-container min-h-screen">
+    <!-- TopAppBar -->
+    <header
+        class="flex justify-between items-center px-margin-mobile md:px-margin-desktop h-16 w-full fixed top-0 z-50 bg-surface border-b border-outline-variant">
+        <div class="flex items-center gap-4">
+            <button
+                class="material-symbols-outlined p-2 rounded-full hover:bg-surface-container-low transition-colors text-primary active:scale-95 transition-all">menu</button>
+            <h1 class="font-headline-md text-headline-md font-bold text-primary">Notely</h1>
+        </div>
+        <div class="flex items-center gap-2">
+            <div
+                class="w-10 h-10 rounded-xl bg-surface-container-highest border border-outline-variant overflow-hidden">
+                <img alt="User Profile" class="w-full h-full object-cover"
+                    src="https://lh3.googleusercontent.com/aida-public/AB6AXuDYy9_zqRL_BB5EWZArcm4hto_4et84RHeKVLTf14P7zDAOmGCG_AxyNla5iNJf_bdwFNJQq8b9B6VnqcUUYew3GYfa5CD4KRWWhc0LLpvpFMA42hTazyx5NXH6Q-I3qUP1GVk_8dBzcQ1WfmN7YG4S2qQvuDssKYpo_jkqfacBbCbO2ueknuQEFf9I-hoPgyjKSuxKAhyNArKJxK7QKAdXk0eFzLszZ_VO0iYvlvUAZ6ruQRd1ygb4" />
+            </div>
+        </div>
+    </header>
+    <!-- Main Content -->
+    <main class="pt-24 pb-32 max-w-[1200px] mx-auto px-margin-mobile md:px-margin-desktop">
+        <!-- Top Section: Focus -->
+        <section class="mb-10">
+            <div class="flex flex-col md:flex-row md:items-end justify-between gap-4">
+                <div>
+                    <span class="font-label-sm text-label-sm text-secondary uppercase tracking-widest mb-1 block">Deep
+                        Work Session</span>
+                    <h2 class="font-headline-lg text-headline-lg-mobile md:text-headline-lg text-on-surface">Focus</h2>
+                </div>
+                <div class="flex gap-2">
+                    <button
+                        class="bg-primary text-on-primary px-6 py-2.5 rounded-lg font-label-sm text-label-sm hover:brightness-110 active:scale-95 transition-all shadow-sm">
+                        Start Timer
+                    </button>
+                </div>
+            </div>
+        </section>
+        <!-- Pinned Notes -->
+        <section class="mb-12">
+            <div class="flex items-center justify-between mb-4">
+                <h3 class="font-headline-md text-headline-md text-on-surface">Pinned Notes</h3>
+                <button class="text-primary font-label-sm text-label-sm hover:underline">View all</button>
+            </div>
+            <div class="flex gap-gutter overflow-x-auto hide-scrollbar pb-4 snap-x">
+                <!-- Note Card 1 -->
+                <div
+                    class="min-w-[280px] md:min-w-[340px] bg-surface-container-lowest border border-outline-variant p-6 rounded-xl snap-start hover:border-primary transition-colors cursor-pointer group shadow-sm">
+                    <div class="flex justify-between items-start mb-4">
+                        <span class="material-symbols-outlined text-primary text-sm"
+                            style="font-variation-settings: 'FILL' 1;">push_pin</span>
+                        <span class="font-label-sm text-label-sm text-secondary">2h ago</span>
+                    </div>
+                    <h4 class="font-headline-md text-headline-md mb-2 group-hover:text-primary transition-colors">
+                        Quarterly Strategy 2024</h4>
+                    <p class="text-on-surface-variant font-body-md line-clamp-3 leading-relaxed">
+                        The primary goal for this quarter is to transition our infrastructure to a decentralized model
+                        while maintaining the high-contrast aesthetic...
+                    </p>
+                </div>
+                <!-- Note Card 2 -->
+                <div
+                    class="min-w-[280px] md:min-w-[340px] bg-surface-container-lowest border border-outline-variant p-6 rounded-xl snap-start hover:border-primary transition-colors cursor-pointer group shadow-sm">
+                    <div class="flex justify-between items-start mb-4">
+                        <span class="material-symbols-outlined text-primary text-sm"
+                            style="font-variation-settings: 'FILL' 1;">push_pin</span>
+                        <span class="font-label-sm text-label-sm text-secondary">Yesterday</span>
+                    </div>
+                    <h4 class="font-headline-md text-headline-md mb-2 group-hover:text-primary transition-colors">
+                        Digital Garden Research</h4>
+                    <p class="text-on-surface-variant font-body-md line-clamp-3 leading-relaxed">
+                        Exploration of non-linear note-taking methods. Comparing Zettelkasten with the Evergreen note
+                        system for cognitive endurance...
+                    </p>
+                </div>
+                <!-- Note Card 3 -->
+                <div
+                    class="min-w-[280px] md:min-w-[340px] bg-surface-container-lowest border border-outline-variant p-6 rounded-xl snap-start hover:border-primary transition-colors cursor-pointer group shadow-sm">
+                    <div class="flex justify-between items-start mb-4">
+                        <span class="material-symbols-outlined text-primary text-sm"
+                            style="font-variation-settings: 'FILL' 1;">push_pin</span>
+                        <span class="font-label-sm text-label-sm text-secondary">3 days ago</span>
+                    </div>
+                    <h4 class="font-headline-md text-headline-md mb-2 group-hover:text-primary transition-colors">Book
+                        Summary: Deep Work</h4>
+                    <p class="text-on-surface-variant font-body-md line-clamp-3 leading-relaxed">
+                        Cal Newport's hypothesis on the value of deep focus in an age of distraction. Key takeaways:
+                        schedule deep work sessions...
+                    </p>
+                </div>
+            </div>
+        </section>
+        <!-- Today's Actions -->
+        <section class="mb-12 max-w-[720px]">
+            <div class="bg-surface-container-lowest border border-outline-variant rounded-xl p-6 shadow-sm">
+                <!-- Calendar Header -->
+                <div class="flex items-center justify-between mb-6">
+                    <h3 class="font-headline-md text-headline-md text-on-surface">October 2023</h3>
+                    <div class="flex gap-2">
+                        <button
+                            class="material-symbols-outlined p-1 hover:bg-surface-container-low rounded-full transition-colors">chevron_left</button>
+                        <button
+                            class="material-symbols-outlined p-1 hover:bg-surface-container-low rounded-full transition-colors">chevron_right</button>
+                    </div>
+                </div>
+                <!-- Calendar Grid -->
+                <div class="grid grid-cols-7 gap-2 mb-6">
+                    <!-- Days Header -->
+                    <div class="text-center font-label-sm text-secondary py-2">S</div>
+                    <div class="text-center font-label-sm text-secondary py-2">M</div>
+                    <div class="text-center font-label-sm text-secondary py-2">T</div>
+                    <div class="text-center font-label-sm text-secondary py-2">W</div>
+                    <div class="text-center font-label-sm text-secondary py-2">T</div>
+                    <div class="text-center font-label-sm text-secondary py-2">F</div>
+                    <div class="text-center font-label-sm text-secondary py-2">S</div>
+                    <!-- Date Cells (Sample Week) -->
+                    <div
+                        class="aspect-square flex flex-col items-center justify-center rounded-lg border border-transparent hover:border-primary hover:-translate-y-1 transition-all cursor-pointer relative group">
+                        <span class="text-sm">22</span>
+                    </div>
+                    <div
+                        class="aspect-square flex flex-col items-center justify-center rounded-lg border border-transparent hover:border-primary hover:-translate-y-1 transition-all cursor-pointer relative group">
+                        <span class="text-sm">23</span>
+                        <div class="absolute bottom-1 right-1 flex gap-0.5">
+                            <div class="w-1 h-1 rounded-full bg-primary"></div>
+                        </div>
+                        <div
+                            class="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 px-2 py-1 bg-inverse-surface text-inverse-on-surface text-[10px] rounded opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none whitespace-nowrap">
+                            1 task | 0 done</div>
+                    </div>
+                    <div
+                        class="aspect-square flex flex-col items-center justify-center rounded-lg border-2 border-primary hover:-translate-y-1 transition-all cursor-pointer relative group">
+                        <span class="text-sm font-bold text-primary">24</span>
+                        <div class="absolute bottom-1 right-1 flex gap-0.5">
+                            <div class="w-1 h-1 rounded-full bg-primary"></div>
+                            <div class="w-1 h-1 rounded-full bg-green-500"></div>
+                        </div>
+                        <div
+                            class="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 px-2 py-1 bg-inverse-surface text-inverse-on-surface text-[10px] rounded opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none whitespace-nowrap">
+                            2 tasks | 1 done</div>
+                    </div>
+                    <div
+                        class="aspect-square flex flex-col items-center justify-center rounded-lg border border-transparent hover:border-primary hover:-translate-y-1 transition-all cursor-pointer relative group">
+                        <span class="text-sm">25</span>
+                        <div class="absolute bottom-1 right-1 flex gap-0.5">
+                            <div class="w-1 h-1 rounded-full bg-orange-500"></div>
+                        </div>
+                        <div
+                            class="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 px-2 py-1 bg-inverse-surface text-inverse-on-surface text-[10px] rounded opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none whitespace-nowrap">
+                            1 skipped</div>
+                    </div>
+                    <div
+                        class="aspect-square flex flex-col items-center justify-center rounded-lg border border-transparent hover:border-primary hover:-translate-y-1 transition-all cursor-pointer relative group">
+                        <span class="text-sm">26</span>
+                        <div class="absolute bottom-1 right-1 flex gap-0.5">
+                            <div class="w-1 h-1 rounded-full bg-error"></div>
+                        </div>
+                        <div
+                            class="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 px-2 py-1 bg-inverse-surface text-inverse-on-surface text-[10px] rounded opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none whitespace-nowrap">
+                            1 overdue</div>
+                    </div>
+                    <div
+                        class="aspect-square flex flex-col items-center justify-center rounded-lg border border-transparent hover:border-primary hover:-translate-y-1 transition-all cursor-pointer relative group">
+                        <span class="text-sm">27</span>
+                    </div>
+                    <div
+                        class="aspect-square flex flex-col items-center justify-center rounded-lg border border-transparent hover:border-primary hover:-translate-y-1 transition-all cursor-pointer relative group">
+                        <span class="text-sm text-secondary/40">28</span>
+                    </div>
+                </div>
+                <div class="mt-6 p-4 bg-surface-container-low rounded-xl border border-outline-variant">
+                    <div class="flex items-center justify-between mb-4">
+                        <h4 class="font-headline-md text-sm font-bold text-on-surface">Tasks for Oct 24, 2023</h4>
+                        <span class="text-[10px] font-medium text-secondary uppercase tracking-wider">2 Tasks</span>
+                    </div>
+                    <div class="space-y-3">
+                        <!-- Task 1 -->
+                        <div
+                            class="flex items-center justify-between py-2 border-b border-outline-variant last:border-0">
+                            <div class="flex items-center gap-3">
+                                <div class="w-2 h-2 rounded-full bg-primary"></div>
+                                <div>
+                                    <p class="text-sm font-medium text-on-surface">Project Proposal Draft</p>
+                                    <span class="font-label-sm text-[10px] text-error uppercase font-semibold">Urgent
+                                        &amp; Important</span>
+                                </div>
+                            </div>
+                            <span class="material-symbols-outlined text-secondary text-sm">more_vert</span>
+                        </div>
+                        <!-- Task 2 -->
+                        <div
+                            class="flex items-center justify-between py-2 border-b border-outline-variant last:border-0">
+                            <div class="flex items-center gap-3">
+                                <span class="material-symbols-outlined text-[14px] text-green-500">check</span>
+                                <div>
+                                    <p class="text-sm font-medium text-on-surface">Research User Journey Flow</p>
+                                    <span
+                                        class="font-label-sm text-[10px] text-primary uppercase font-semibold">Important</span>
+                                </div>
+                            </div>
+                            <span class="material-symbols-outlined text-secondary text-sm">more_vert</span>
+                        </div>
+                    </div>
+                </div>
+                <!-- Legend -->
+                <div class="flex flex-wrap gap-4 pt-4 border-t border-outline-variant">
+                    <div class="flex items-center gap-1.5">
+                        <div class="w-2 h-2 rounded-full bg-primary"></div>
+                        <span class="text-[10px] font-medium text-secondary uppercase tracking-wider">Planned</span>
+                    </div>
+                    <div class="flex items-center gap-1.5">
+                        <span class="material-symbols-outlined text-[12px] text-green-500">check</span>
+                        <span class="text-[10px] font-medium text-secondary uppercase tracking-wider">Done</span>
+                    </div>
+                    <div class="flex items-center gap-1.5">
+                        <span class="material-symbols-outlined text-[12px] text-orange-500">arrow_forward</span>
+                        <span class="text-[10px] font-medium text-secondary uppercase tracking-wider">Skipped</span>
+                    </div>
+                    <div class="flex items-center gap-1.5">
+                        <span class="material-symbols-outlined text-[12px] text-error">close</span>
+                        <span class="text-[10px] font-medium text-secondary uppercase tracking-wider">Overdue</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <section class="max-w-[720px]">
+            <div class="flex items-center justify-between mb-6">
+                <div class="flex items-center gap-3">
+                    <h3 class="font-headline-md text-headline-md text-on-surface">Today's Actions</h3>
+                    <span
+                        class="bg-primary-fixed text-primary px-3 py-1 rounded-full font-label-sm text-[10px] font-bold">3
+                        TASKS</span>
+                </div>
+                <button
+                    class="material-symbols-outlined text-on-surface-variant hover:text-primary transition-colors p-1">tune</button>
+            </div>
+            <div class="space-y-3">
+                <!-- Todo Item 1 -->
+                <div
+                    class="bg-surface-container-lowest border border-outline-variant rounded-xl p-4 flex items-center justify-between hover:shadow-md transition-shadow group">
+                    <div class="flex items-center gap-4">
+                        <button
+                            class="w-6 h-6 rounded-lg border-2 border-outline-variant hover:border-primary flex items-center justify-center transition-all bg-transparent">
+                            <span class="material-symbols-outlined text-xs text-on-primary hidden">check</span>
+                        </button>
+                        <div>
+                            <p
+                                class="font-body-md font-medium text-on-surface group-hover:text-primary transition-colors">
+                                Project Proposal Draft</p>
+                            <div class="flex items-center gap-2 mt-1">
+                                <span
+                                    class="font-label-sm text-[10px] text-error px-2 py-0.5 border border-error rounded-full font-semibold uppercase tracking-wide">Urgent
+                                    &amp; Important</span>
+                                <span class="text-secondary font-label-sm text-[10px]">Due 4:00 PM</span>
+                            </div>
+                        </div>
+                    </div>
+                    <button
+                        class="material-symbols-outlined text-secondary text-sm p-2 hover:bg-surface-container-low rounded-full">more_vert</button>
+                </div>
+                <!-- Todo Item 2 -->
+                <div
+                    class="bg-surface-container-lowest border border-outline-variant rounded-xl p-4 flex items-center justify-between hover:shadow-md transition-shadow group">
+                    <div class="flex items-center gap-4">
+                        <button
+                            class="w-6 h-6 rounded-lg border-2 border-outline-variant hover:border-primary flex items-center justify-center transition-all bg-transparent">
+                            <span class="material-symbols-outlined text-xs text-on-primary hidden">check</span>
+                        </button>
+                        <div>
+                            <p
+                                class="font-body-md font-medium text-on-surface group-hover:text-primary transition-colors">
+                                Research User Journey Flow</p>
+                            <div class="flex items-center gap-2 mt-1">
+                                <span
+                                    class="font-label-sm text-[10px] text-primary px-2 py-0.5 border border-primary rounded-full font-semibold uppercase tracking-wide">Important</span>
+                                <span class="text-secondary font-label-sm text-[10px]">Next: Designing</span>
+                            </div>
+                        </div>
+                    </div>
+                    <button
+                        class="material-symbols-outlined text-secondary text-sm p-2 hover:bg-surface-container-low rounded-full">more_vert</button>
+                </div>
+                <!-- Todo Item 3 -->
+                <div
+                    class="bg-surface-container-lowest border border-outline-variant rounded-xl p-4 flex items-center justify-between hover:shadow-md transition-shadow group">
+                    <div class="flex items-center gap-4">
+                        <button
+                            class="w-6 h-6 rounded-lg border-2 border-outline-variant hover:border-primary flex items-center justify-center transition-all bg-transparent">
+                            <span class="material-symbols-outlined text-xs text-on-primary hidden">check</span>
+                        </button>
+                        <div>
+                            <p
+                                class="font-body-md font-medium text-on-surface group-hover:text-primary transition-colors">
+                                Review Client Feedback</p>
+                            <div class="flex items-center gap-2 mt-1">
+                                <span
+                                    class="font-label-sm text-[10px] text-error px-2 py-0.5 border border-error rounded-full font-semibold uppercase tracking-wide">Urgent
+                                    &amp; Important</span>
+                                <span class="text-secondary font-label-sm text-[10px]">Pending Email</span>
+                            </div>
+                        </div>
+                    </div>
+                    <button
+                        class="material-symbols-outlined text-secondary text-sm p-2 hover:bg-surface-container-low rounded-full">more_vert</button>
+                </div>
+            </div>
+            <!-- Focus Assist Banner -->
+            <div class="mt-8 p-6 bg-primary-container rounded-2xl flex items-center gap-6 shadow-lg shadow-primary/10">
+                <div class="p-3 bg-on-primary-container/20 rounded-xl">
+                    <span class="material-symbols-outlined text-on-primary-container text-3xl">psychology</span>
+                </div>
+                <div>
+                    <h5 class="font-headline-md text-on-primary text-lg">Focus Assist is active</h5>
+                    <p class="text-on-primary-container/90 text-sm">Notifications are silenced for the next 45 minutes.
+                    </p>
+                </div>
+            </div>
+        </section>
+    </main>
+    <!-- BottomNavBar -->
+    <nav
+        class="fixed bottom-0 w-full z-50 flex justify-around items-center h-20 bg-surface px-4 border-t border-outline-variant">
+        <!-- Dashboard (Active) -->
+        <a class="flex flex-col items-center justify-center text-primary font-bold group relative px-2" href="#">
+            <span class="material-symbols-outlined mb-1 group-active:scale-90 transition-transform duration-150"
+                style="font-variation-settings: 'FILL' 1;">dashboard</span>
+            <span class="font-label-sm text-label-sm">Dashboard</span>
+            <div class="absolute -top-[1px] left-1/2 -translate-x-1/2 w-8 h-[3px] bg-primary rounded-b-full"></div>
+        </a>
+        <!-- Notes -->
+        <a class="flex flex-col items-center justify-center text-secondary hover:text-primary transition-colors p-2 rounded-xl group"
+            href="#">
+            <span
+                class="material-symbols-outlined mb-1 group-active:scale-90 transition-transform duration-150">description</span>
+            <span class="font-label-sm text-label-sm">Notes</span>
+        </a>
+        <!-- FAB -->
+        <div class="relative -top-10">
+            <button
+                class="bg-primary text-on-primary w-16 h-16 rounded-2xl flex items-center justify-center shadow-xl shadow-primary/20 hover:shadow-primary/30 hover:-translate-y-1 active:scale-95 transition-all">
+                <span class="material-symbols-outlined text-3xl">add</span>
+            </button>
+        </div>
+        <!-- Todos -->
+        <a class="flex flex-col items-center justify-center text-secondary hover:text-primary transition-colors p-2 rounded-xl group"
+            href="#">
+            <span
+                class="material-symbols-outlined mb-1 group-active:scale-90 transition-transform duration-150">task_alt</span>
+            <span class="font-label-sm text-label-sm">Todos</span>
+        </a>
+        <!-- History -->
+        <a class="flex flex-col items-center justify-center text-secondary hover:text-primary transition-colors p-2 rounded-xl group"
+            href="#">
+            <span
+                class="material-symbols-outlined mb-1 group-active:scale-90 transition-transform duration-150">history</span>
+            <span class="font-label-sm text-label-sm">History</span>
+        </a>
+    </nav>
+    <script>
+        // Interactive checkmarks
+        document.querySelectorAll('button.w-6.h-6').forEach(btn => {
+            btn.addEventListener('click', function () {
+                const icon = this.querySelector('.material-symbols-outlined');
+                const text = this.nextElementSibling.querySelector('p');
+                if (icon.classList.contains('hidden')) {
+                    icon.classList.remove('hidden');
+                    this.classList.add('bg-primary', 'border-primary');
+                    text.classList.add('line-through', 'opacity-50');
+                } else {
+                    icon.classList.add('hidden');
+                    this.classList.remove('bg-primary', 'border-primary');
+                    text.classList.remove('line-through', 'opacity-50');
+                }
+            });
+        });
+    </script>
+</body>
+
+</html>
