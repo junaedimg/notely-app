@@ -16,24 +16,29 @@ class TodoController extends Controller
     {
         $tab = $request->get('tab', 'active');
 
-        $todos = Todo::when($tab === 'active', function ($q) {
-                return $q->where('status', 'active');
-            })
-            ->when($tab === 'paused', function ($q) {
-                return $q->where('status', 'paused');
-            })
-            ->when($tab === 'archived', function ($q) {
-                return $q->where('status', 'archived');
-            })
-            ->orderBy('next_due_at')
-            ->orderBy('is_urgent', 'desc')
-            ->orderBy('is_important', 'desc')
-            ->get();
+        if ($tab === 'trash') {
+            $todos = Todo::onlyTrashed()->orderBy('deleted_at', 'desc')->get();
+        } else {
+            $todos = Todo::when($tab === 'active', function ($q) {
+                    return $q->where('status', 'active');
+                })
+                ->when($tab === 'paused', function ($q) {
+                    return $q->where('status', 'paused');
+                })
+                ->when($tab === 'archived', function ($q) {
+                    return $q->where('status', 'archived');
+                })
+                ->orderBy('next_due_at')
+                ->orderBy('is_urgent', 'desc')
+                ->orderBy('is_important', 'desc')
+                ->get();
+        }
 
         $counts = [
             'active' => Todo::where('status', 'active')->count(),
             'paused' => Todo::where('status', 'paused')->count(),
             'archived' => Todo::where('status', 'archived')->count(),
+            'trash' => Todo::onlyTrashed()->count(),
         ];
 
         return view('todos.index', compact('todos', 'tab', 'counts'));
@@ -201,5 +206,21 @@ class TodoController extends Controller
         }
 
         return $next;
+    }
+
+    public function restore(int $id): RedirectResponse
+    {
+        $todo = Todo::onlyTrashed()->findOrFail($id);
+        $todo->restore();
+
+        return redirect()->route('todos.index', ['tab' => 'trash']);
+    }
+
+    public function forceDelete(int $id): RedirectResponse
+    {
+        $todo = Todo::onlyTrashed()->findOrFail($id);
+        $todo->forceDelete();
+
+        return redirect()->route('todos.index', ['tab' => 'trash']);
     }
 }

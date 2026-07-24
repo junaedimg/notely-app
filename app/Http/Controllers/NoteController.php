@@ -9,13 +9,24 @@ use Illuminate\View\View;
 
 class NoteController extends Controller
 {
-    public function index(): View
+    public function index(Request $request): View
     {
-        $notes = Note::orderBy('is_pinned', 'desc')
-            ->orderBy('updated_at', 'desc')
-            ->get();
+        $tab = $request->get('tab', 'active');
 
-        return view('notes.index', compact('notes'));
+        if ($tab === 'trash') {
+            $notes = Note::onlyTrashed()->orderBy('deleted_at', 'desc')->get();
+        } else {
+            $notes = Note::orderBy('is_pinned', 'desc')
+                ->orderBy('updated_at', 'desc')
+                ->get();
+        }
+
+        $counts = [
+            'active' => Note::count(),
+            'trash' => Note::onlyTrashed()->count(),
+        ];
+
+        return view('notes.index', compact('notes', 'tab', 'counts'));
     }
 
     public function create(): View
@@ -73,5 +84,21 @@ class NoteController extends Controller
         $note->update(['is_pinned' => !$note->is_pinned]);
 
         return redirect()->to($request->input('_redirect', route('notes.index')));
+    }
+
+    public function restore(int $id): RedirectResponse
+    {
+        $note = Note::onlyTrashed()->findOrFail($id);
+        $note->restore();
+
+        return redirect()->route('notes.index', ['tab' => 'trash']);
+    }
+
+    public function forceDelete(int $id): RedirectResponse
+    {
+        $note = Note::onlyTrashed()->findOrFail($id);
+        $note->forceDelete();
+
+        return redirect()->route('notes.index', ['tab' => 'trash']);
     }
 }
