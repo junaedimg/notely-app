@@ -91,9 +91,16 @@ class DashboardController extends Controller
             ->whereDate('next_due_at', $selectedDate)
             ->get();
 
-        $dayHistories = TodoHistory::whereDate('completed_at', $selectedDate)
-            ->orWhereDate('skipped_at', $selectedDate)
+        $dayHistories = TodoHistory::where(function ($q) use ($selectedDate) {
+                $q->whereDate('completed_at', $selectedDate)
+                  ->orWhereDate('skipped_at', $selectedDate);
+            })
             ->with('todo')
+            ->get();
+
+        $overdueTodos = Todo::where('status', 'active')
+            ->where('next_due_at', '<', $today->startOfDay())
+            ->whereDate('next_due_at', $selectedDate)
             ->get();
 
         $weekLabel = $weekStart->format('M d') . ' — ' . $periodEnd->format('M d, Y');
@@ -101,7 +108,7 @@ class DashboardController extends Controller
         return view('dashboard', compact(
             'pinnedNotes', 'todayTodos', 'currentDate',
             'weekOffset', 'weekStart', 'calendarData', 'weekLabel',
-            'selectedDate', 'selectedDateStr', 'dayTodos', 'dayHistories'
+            'selectedDate', 'selectedDateStr', 'dayTodos', 'dayHistories', 'overdueTodos'
         ));
     }
 

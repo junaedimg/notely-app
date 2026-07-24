@@ -100,4 +100,4 @@ This ensures all selected days get their turn, not just one day per week.
 
 If `next_due_at` is empty:
 - **No repeat**: todo appears on dashboard (via `whereNull('next_due_at') AND completed_count = 0`)
-- **With repeat**: anchor falls back to `simulated_today()` for the first calculation
+- **With repeat**: anchor falls back to `current_today()` for the first calculation

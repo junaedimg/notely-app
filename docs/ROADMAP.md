@@ -12,7 +12,7 @@
 - Scheduler (schedule-based & completion-based anchor)
 - Eisenhower Matrix (computed attribute, not stored)
 - Single user (auth/user model removed)
-- Simulated date (time-travel debugging via session)
+- Date navigation (change displayed date via top bar date picker)
 
 ## Current Scope (Included)
 
