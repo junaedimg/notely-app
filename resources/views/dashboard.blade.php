@@ -62,95 +62,83 @@
 @endif
 
 <section class="max-w-[720px]">
-    <div class="bg-surface-container-lowest border border-outline-variant rounded-xl p-6 shadow-sm mb-8">
-        <div class="flex items-center justify-between mb-6">
-            <h3 class="font-headline-md text-headline-md text-on-surface">{{ $monthDate->format('F Y') }}</h3>
-            <div class="flex gap-2">
-                <a href="{{ route('dashboard', ['month' => $monthDate->copy()->subMonth()->format('Y-m'), 'day' => request('day')]) }}" class="material-symbols-outlined p-1 hover:bg-surface-container-low rounded-full transition-colors text-secondary">chevron_left</a>
-                <a href="{{ route('dashboard', ['month' => $monthDate->copy()->addMonth()->format('Y-m'), 'day' => request('day')]) }}" class="material-symbols-outlined p-1 hover:bg-surface-container-low rounded-full transition-colors text-secondary">chevron_right</a>
+    <div class="bg-surface-container-lowest border border-outline-variant rounded-xl p-4 shadow-sm mb-6">
+        <div class="flex items-center justify-between mb-3">
+            <h3 class="font-headline-md text-sm font-bold text-on-surface">{{ $weekLabel }}</h3>
+            <div class="flex gap-1">
+                <a href="{{ route('dashboard', ['offset' => $weekOffset - 2, 'date' => request('date')]) }}" class="material-symbols-outlined p-0.5 hover:bg-surface-container-low rounded-full transition-colors text-secondary text-sm">chevron_left</a>
+                <a href="{{ route('dashboard', ['offset' => $weekOffset + 2, 'date' => request('date')]) }}" class="material-symbols-outlined p-0.5 hover:bg-surface-container-low rounded-full transition-colors text-secondary text-sm">chevron_right</a>
             </div>
         </div>
 
-        <div class="grid grid-cols-7 gap-1 mb-6">
+        <div class="grid grid-cols-7 gap-0.5 mb-2">
             @foreach(['S','M','T','W','T','F','S'] as $dayHeader)
-            <div class="text-center font-label-sm text-secondary py-2 text-[11px]">{{ $dayHeader }}</div>
+            <div class="text-center font-label-sm text-secondary text-[10px] py-1">{{ $dayHeader }}</div>
             @endforeach
 
+            @foreach($calendarData as $index => $cell)
+            @if($index === 7)
+        </div>
+        <div class="grid grid-cols-7 gap-0.5 mb-3">
+            @endif
             @php
-                $startDayOfWeek = $monthStart->dayOfWeek;
-                $totalDays = $monthEnd->day;
-                $todayDate = simulated_today()->format('Y-m-d');
-                $selectedDayNum = (int) request('day', simulated_today()->day);
+                $hasActivity = $cell['planned'] > 0 || $cell['completed'] > 0 || $cell['skipped'] > 0 || $cell['overdue'] > 0;
+                $totalTasks = $cell['planned'] + $cell['completed'] + $cell['skipped'];
             @endphp
-
-            @for($i = 0; $i < $startDayOfWeek; $i++)
-            <div></div>
-            @endfor
-
-            @foreach(range(1, $totalDays) as $day)
-                @php
-                    $cellDate = $monthDate->copy()->day($day)->format('Y-m-d');
-                    $data = $calendarData[$day] ?? ['planned' => 0, 'completed' => 0, 'skipped' => 0, 'overdue' => 0];
-                    $isToday = $cellDate === $todayDate;
-                    $isSelected = $day === $selectedDayNum && $monthDate->format('Y-m') === request('month', simulated_today()->format('Y-m'));
-                    $hasActivity = $data['planned'] > 0 || $data['completed'] > 0 || $data['skipped'] > 0 || $data['overdue'] > 0;
-                    $totalTasks = $data['planned'] + $data['completed'] + $data['skipped'];
-                @endphp
-                <a href="{{ route('dashboard', ['month' => $monthDate->format('Y-m'), 'day' => $day]) }}"
-                    class="aspect-square flex flex-col items-center justify-center rounded-lg border transition-all cursor-pointer relative group
-                    {{ $isToday ? 'border-2 border-primary' : 'border-transparent hover:border-primary hover:-translate-y-0.5' }}
-                    {{ $isSelected && !$isToday ? 'bg-primary-fixed border-primary' : '' }}
-                    {{ !$isToday && !$isSelected ? 'hover:bg-surface-container-low' : '' }}">
-                    <span class="text-sm {{ $isToday ? 'font-bold text-primary' : ($isSelected ? 'text-primary' : 'text-on-surface') }}">{{ $day }}</span>
-                    @if($hasActivity)
-                    <div class="absolute bottom-1 right-1 flex gap-0.5">
-                        @if($data['planned'] > 0)<div class="w-1 h-1 rounded-full bg-primary"></div>@endif
-                        @if($data['completed'] > 0)<div class="w-1 h-1 rounded-full bg-green-500"></div>@endif
-                        @if($data['skipped'] > 0)<div class="w-1 h-1 rounded-full bg-orange-500"></div>@endif
-                        @if($data['overdue'] > 0)<div class="w-1 h-1 rounded-full bg-error"></div>@endif
-                    </div>
-                    @endif
-                    @if($totalTasks > 0)
-                    <div class="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 px-2 py-1 bg-inverse-surface text-inverse-on-surface text-[10px] rounded opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none whitespace-nowrap z-20 shadow-lg">
-                        {{ $totalTasks }} task{{ $totalTasks > 1 ? 's' : '' }} | {{ $data['completed'] }} done
-                    </div>
-                    @endif
-                </a>
+            <a href="{{ route('dashboard', ['offset' => $weekOffset, 'date' => $cell['dateStr']]) }}"
+                class="h-8 flex flex-col items-center justify-center rounded-md border transition-all cursor-pointer relative group text-[11px]
+                {{ $cell['isToday'] ? 'border-2 border-primary font-bold text-primary' : 'border-transparent hover:border-primary hover:bg-surface-container-low' }}
+                {{ $cell['dateStr'] === $selectedDateStr && !$cell['isToday'] ? 'bg-primary-fixed border-primary font-semibold text-primary' : '' }}
+                {{ !$cell['isToday'] && $cell['dateStr'] !== $selectedDateStr ? 'text-on-surface' : '' }}">
+                <span>{{ $cell['day'] }}</span>
+                @if($hasActivity)
+                <div class="flex gap-0.5 absolute bottom-0.5">
+                    @if($cell['planned'] > 0)<div class="w-1 h-1 rounded-full bg-primary"></div>@endif
+                    @if($cell['completed'] > 0)<div class="w-1 h-1 rounded-full bg-green-500"></div>@endif
+                    @if($cell['skipped'] > 0)<div class="w-1 h-1 rounded-full bg-orange-500"></div>@endif
+                    @if($cell['overdue'] > 0)<div class="w-1 h-1 rounded-full bg-error"></div>@endif
+                </div>
+                @endif
+                @if($totalTasks > 0)
+                <div class="absolute bottom-full left-1/2 -translate-x-1/2 mb-1 px-2 py-0.5 bg-inverse-surface text-inverse-on-surface text-[9px] rounded opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none whitespace-nowrap z-20 shadow-lg">
+                    {{ $totalTasks }} task{{ $totalTasks > 1 ? 's' : '' }} | {{ $cell['completed'] }} done
+                </div>
+                @endif
+            </a>
             @endforeach
         </div>
 
-        @if($selectedDate->format('Y-m') === $monthDate->format('Y-m'))
-        <div class="mt-4 p-4 bg-surface-container-low rounded-xl border border-outline-variant">
-            <div class="flex items-center justify-between mb-4">
-                <h4 class="font-headline-md text-sm font-bold text-on-surface">Tasks for {{ $selectedDate->format('M d, Y') }}</h4>
-                <span class="text-[10px] font-medium text-secondary uppercase tracking-wider">{{ $dayTodos->count() + $dayHistories->count() }} items</span>
+        @if(strtotime($selectedDateStr) >= strtotime($calendarData[0]['dateStr']) && strtotime($selectedDateStr) <= strtotime($calendarData[13]['dateStr']))
+        <div class="mt-2 p-3 bg-surface-container-low rounded-xl border border-outline-variant">
+            <div class="flex items-center justify-between mb-2">
+                <h4 class="text-xs font-bold text-on-surface">{{ $selectedDate->format('M d, Y') }}</h4>
+                <span class="text-[9px] font-medium text-secondary uppercase tracking-wider">{{ $dayTodos->count() + $dayHistories->count() }} items</span>
             </div>
-            <div class="space-y-3">
+            <div class="space-y-1.5">
                 @forelse($dayTodos as $todo)
-                <div class="flex items-center justify-between py-2 border-b border-outline-variant last:border-0">
-                    <div class="flex items-center gap-3">
-                        <div class="w-2 h-2 rounded-full bg-primary"></div>
+                <div class="flex items-center justify-between py-1 border-b border-outline-variant last:border-0">
+                    <div class="flex items-center gap-2">
+                        <div class="w-1.5 h-1.5 rounded-full bg-primary shrink-0"></div>
                         <div>
-                            <p class="text-sm font-medium text-on-surface">{{ $todo->title }}</p>
-                            <span class="font-label-sm text-[10px] {{ $todo->quadrant === 'do' ? 'text-error' : ($todo->quadrant === 'plan' ? 'text-primary' : 'text-secondary') }} uppercase font-semibold">
+                            <p class="text-xs font-medium text-on-surface">{{ $todo->title }}</p>
+                            <span class="text-[9px] {{ $todo->quadrant === 'do' ? 'text-error' : ($todo->quadrant === 'plan' ? 'text-primary' : 'text-secondary') }} uppercase font-semibold">
                                 {{ $todo->quadrant === 'do' ? 'Urgent & Important' : ($todo->quadrant === 'plan' ? 'Important' : ($todo->quadrant === 'delegate' ? 'Urgent' : 'Eliminate')) }}
                             </span>
                         </div>
                     </div>
-                    <a href="{{ route('todos.edit', $todo) }}" class="material-symbols-outlined text-secondary text-sm hover:text-primary p-1 rounded-full hover:bg-surface-container-low transition-all">more_vert</a>
                 </div>
                 @empty
                 @foreach($dayHistories as $history)
-                <div class="flex items-center justify-between py-2 border-b border-outline-variant last:border-0">
-                    <div class="flex items-center gap-3">
+                <div class="flex items-center justify-between py-1 border-b border-outline-variant last:border-0">
+                    <div class="flex items-center gap-2">
                         @if($history->completed_at)
-                        <span class="material-symbols-outlined text-[14px] text-green-500">check</span>
+                        <span class="material-symbols-outlined text-[12px] text-green-500">check</span>
                         @elseif($history->skipped_at)
-                        <span class="material-symbols-outlined text-[14px] text-orange-500">arrow_forward</span>
+                        <span class="material-symbols-outlined text-[12px] text-orange-500">arrow_forward</span>
                         @endif
                         <div>
-                            <p class="text-sm font-medium text-on-surface">{{ $history->todo?->title ?? 'Deleted todo' }}</p>
-                            <span class="font-label-sm text-[10px] text-secondary uppercase font-semibold">
+                            <p class="text-xs font-medium text-on-surface">{{ $history->todo?->title ?? 'Deleted todo' }}</p>
+                            <span class="text-[9px] text-secondary uppercase font-semibold">
                                 {{ $history->completed_at ? 'Completed' : 'Skipped' }}
                             </span>
                         </div>
@@ -158,29 +146,29 @@
                 </div>
                 @endforeach
                 @if($dayTodos->isEmpty() && $dayHistories->isEmpty())
-                <p class="text-sm text-secondary text-center py-4">No tasks for this day</p>
+                <p class="text-[11px] text-secondary text-center py-2">No tasks for this day</p>
                 @endif
                 @endforelse
             </div>
         </div>
         @endif
 
-        <div class="flex flex-wrap gap-4 pt-4 border-t border-outline-variant mt-4">
-            <div class="flex items-center gap-1.5">
-                <div class="w-2 h-2 rounded-full bg-primary"></div>
-                <span class="text-[10px] font-medium text-secondary uppercase tracking-wider">Planned</span>
+        <div class="flex flex-wrap gap-3 pt-3 border-t border-outline-variant mt-3">
+            <div class="flex items-center gap-1">
+                <div class="w-1.5 h-1.5 rounded-full bg-primary"></div>
+                <span class="text-[9px] font-medium text-secondary uppercase tracking-wider">Planned</span>
             </div>
-            <div class="flex items-center gap-1.5">
-                <span class="material-symbols-outlined text-[12px] text-green-500">check</span>
-                <span class="text-[10px] font-medium text-secondary uppercase tracking-wider">Done</span>
+            <div class="flex items-center gap-1">
+                <span class="material-symbols-outlined text-[10px] text-green-500">check</span>
+                <span class="text-[9px] font-medium text-secondary uppercase tracking-wider">Done</span>
             </div>
-            <div class="flex items-center gap-1.5">
-                <span class="material-symbols-outlined text-[12px] text-orange-500">arrow_forward</span>
-                <span class="text-[10px] font-medium text-secondary uppercase tracking-wider">Skipped</span>
+            <div class="flex items-center gap-1">
+                <span class="material-symbols-outlined text-[10px] text-orange-500">arrow_forward</span>
+                <span class="text-[9px] font-medium text-secondary uppercase tracking-wider">Skipped</span>
             </div>
-            <div class="flex items-center gap-1.5">
-                <span class="material-symbols-outlined text-[12px] text-error">close</span>
-                <span class="text-[10px] font-medium text-secondary uppercase tracking-wider">Overdue</span>
+            <div class="flex items-center gap-1">
+                <span class="material-symbols-outlined text-[10px] text-error">close</span>
+                <span class="text-[9px] font-medium text-secondary uppercase tracking-wider">Overdue</span>
             </div>
         </div>
     </div>

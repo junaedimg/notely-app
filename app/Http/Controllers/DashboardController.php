@@ -18,10 +18,9 @@ class DashboardController extends Controller
         $today = simulated_today();
         $currentDate = $today->format('Y-m-d');
 
-        $month = $request->get('month', $today->format('Y-m'));
-        $monthDate = Carbon::parse($month . '-01');
-        $monthStart = $monthDate->copy()->startOfMonth();
-        $monthEnd = $monthDate->copy()->endOfMonth();
+        $weekOffset = (int) $request->get('offset', 0);
+        $weekStart = $today->copy()->startOfWeek()->addWeeks($weekOffset);
+        $periodEnd = $weekStart->copy()->addDays(13);
 
         $pinnedNotes = Note::where('is_pinned', true)
             ->orderBy('updated_at', 'desc')
@@ -41,19 +40,19 @@ class DashboardController extends Controller
             ->get();
 
         $planned = Todo::where('status', 'active')
-            ->whereBetween('next_due_at', [$monthStart, $monthEnd])
+            ->whereBetween('next_due_at', [$weekStart, $periodEnd])
             ->selectRaw('DATE(next_due_at) as date, COUNT(*) as total')
             ->groupBy('date')
             ->get()
             ->keyBy('date');
 
-        $completed = TodoHistory::whereBetween('completed_at', [$monthStart, $monthEnd])
+        $completed = TodoHistory::whereBetween('completed_at', [$weekStart, $periodEnd])
             ->selectRaw('DATE(completed_at) as date, COUNT(*) as total')
             ->groupBy('date')
             ->get()
             ->keyBy('date');
 
-        $skipped = TodoHistory::whereBetween('skipped_at', [$monthStart, $monthEnd])
+        $skipped = TodoHistory::whereBetween('skipped_at', [$weekStart, $periodEnd])
             ->selectRaw('DATE(skipped_at) as date, COUNT(*) as total')
             ->groupBy('date')
             ->get()
@@ -61,27 +60,32 @@ class DashboardController extends Controller
 
         $overdue = Todo::where('status', 'active')
             ->where('next_due_at', '<', $today->startOfDay())
-            ->where(function ($q) use ($monthStart, $monthEnd) {
-                $q->whereBetween('next_due_at', [$monthStart, $monthEnd]);
-            })
+            ->where('next_due_at', '>=', $weekStart)
             ->selectRaw('DATE(next_due_at) as date, COUNT(*) as total')
             ->groupBy('date')
             ->get()
             ->keyBy('date');
 
+        $rangeStart = $weekStart->copy();
         $calendarData = [];
-        foreach (range(1, $monthEnd->day) as $day) {
-            $date = $monthDate->copy()->day($day)->format('Y-m-d');
-            $calendarData[$day] = [
-                'planned' => $planned[$date]->total ?? 0,
-                'completed' => $completed[$date]->total ?? 0,
-                'skipped' => $skipped[$date]->total ?? 0,
-                'overdue' => $overdue[$date]->total ?? 0,
+        foreach (range(0, 13) as $offset) {
+            $date = $rangeStart->copy()->addDays($offset);
+            $dateStr = $date->format('Y-m-d');
+            $calendarData[] = [
+                'date' => $date,
+                'dateStr' => $dateStr,
+                'day' => $date->day,
+                'dayOfWeek' => $date->dayOfWeek,
+                'isToday' => $dateStr === $currentDate,
+                'planned' => $planned[$dateStr]->total ?? 0,
+                'completed' => $completed[$dateStr]->total ?? 0,
+                'skipped' => $skipped[$dateStr]->total ?? 0,
+                'overdue' => $overdue[$dateStr]->total ?? 0,
             ];
         }
 
-        $selectedDay = $request->get('day', $today->day);
-        $selectedDate = $monthDate->copy()->day(min($selectedDay, $monthEnd->day));
+        $selectedDateStr = $request->get('date', $currentDate);
+        $selectedDate = Carbon::parse($selectedDateStr);
 
         $dayTodos = Todo::where('status', 'active')
             ->whereDate('next_due_at', $selectedDate)
@@ -92,10 +96,12 @@ class DashboardController extends Controller
             ->with('todo')
             ->get();
 
+        $weekLabel = $weekStart->format('M d') . ' — ' . $periodEnd->format('M d, Y');
+
         return view('dashboard', compact(
             'pinnedNotes', 'todayTodos', 'currentDate',
-            'monthDate', 'monthStart', 'monthEnd', 'calendarData',
-            'selectedDate', 'dayTodos', 'dayHistories'
+            'weekOffset', 'weekStart', 'calendarData', 'weekLabel',
+            'selectedDate', 'selectedDateStr', 'dayTodos', 'dayHistories'
         ));
     }
 
