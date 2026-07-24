@@ -21,14 +21,9 @@
     </div>
     <div class="flex gap-gutter overflow-x-auto hide-scrollbar pb-4 snap-x">
         @foreach($pinnedNotes as $note)
-        <a href="{{ route('notes.show', $note) }}" class="min-w-[280px] md:min-w-[340px] bg-surface-container-lowest border border-outline-variant p-6 rounded-xl snap-start hover:border-primary transition-colors cursor-pointer group shadow-sm">
-            <div class="flex justify-between items-start mb-4">
-                <span class="material-symbols-outlined text-primary text-sm" style="font-variation-settings: 'FILL' 1;">push_pin</span>
-                <span class="font-label-sm text-label-sm text-secondary">{{ $note->updated_at->diffForHumans() }}</span>
-            </div>
-            <h4 class="font-headline-md text-headline-md mb-2 group-hover:text-primary transition-colors">{{ $note->title }}</h4>
-            <p class="text-on-surface-variant font-body-md line-clamp-3 leading-relaxed">{{ Str::limit($note->content, 150) }}</p>
-        </a>
+        <div class="min-w-[280px] md:min-w-[340px] snap-start shrink-0">
+            <x-note-card :note="$note" />
+        </div>
         @endforeach
     </div>
 </section>

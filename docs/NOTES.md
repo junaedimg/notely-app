@@ -63,3 +63,35 @@ Notes mendukung soft delete. Saat dihapus, data tidak langsung hilang dari datab
 - Delete dari halaman show → soft delete
 - Data yang sudah dihapus tidak muncul di index atau dashboard
 - (Fitur restore akan datang)
+
+---
+
+## Color
+
+Notes memiliki field `color` dengan nilai: `none`, `yellow`, `blue`, `green`, `red`, `purple`.
+
+### Form create/edit — Swatch Picker
+Dropdown color diganti dengan visual swatch picker:
+- Lingkaran 24px dengan warna solid
+- None: lingkaran dashed border
+- Klik → icon check muncul + outline primary
+- Value disimpan di hidden input `name="color"`
+
+### Index card — Color Accent
+Setiap card note menampilkan warna sebagai:
+- **Left border** 4px solid sesuai warna
+- **Background tint** tipis sesuai warna (e.g., yellow → `#fefce8`)
+- Jika `color = none`, card white tanpa border kiri
+
+### Dashboard pinned notes
+Sama seperti index — menggunakan component `x-note-card` yang konsisten.
+
+### Color yang tersedia
+
+| Name | Hex | Background Tint |
+|------|-----|----------------|
+| Yellow | `#f59e0b` | `#fefce8` |
+| Blue | `#3b82f6` | `#eff6ff` |
+| Green | `#22c55e` | `#f0fdf4` |
+| Red | `#ef4444` | `#fef2f2` |
+| Purple | `#a855f7` | `#faf5ff` |

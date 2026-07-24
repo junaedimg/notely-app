@@ -36,15 +36,26 @@
             </label>
 
             <div>
-                <label class="font-label-sm text-label-sm text-secondary uppercase tracking-widest mr-2">Color</label>
-                <select name="color" class="bg-surface-container-low border border-outline-variant rounded-lg px-3 py-2 font-body-md text-on-surface focus:outline-none focus:border-primary">
-                    <option value="">None</option>
-                    <option value="yellow" @if($note->color === 'yellow') selected @endif>Yellow</option>
-                    <option value="blue" @if($note->color === 'blue') selected @endif>Blue</option>
-                    <option value="green" @if($note->color === 'green') selected @endif>Green</option>
-                    <option value="red" @if($note->color === 'red') selected @endif>Red</option>
-                    <option value="purple" @if($note->color === 'purple') selected @endif>Purple</option>
-                </select>
+                <label class="font-label-sm text-label-sm text-secondary uppercase tracking-widest mb-3 block">Color</label>
+                <div class="flex gap-4" id="color-picker">
+                    @php $colors = ['yellow'=>'#f59e0b','blue'=>'#3b82f6','green'=>'#22c55e','red'=>'#ef4444','purple'=>'#a855f7']; @endphp
+                    <input type="hidden" name="color" id="color-input" value="{{ old('color', $note->color) }}">
+                    <label class="flex flex-col items-center gap-1 cursor-pointer group" onclick="document.getElementById('color-input').value='';document.querySelectorAll('#color-picker label .check').forEach(e=>e.style.display='none');document.querySelectorAll('#color-picker label .swatch').forEach(e=>e.style.outline='');this.querySelector('.check').style.display=''">
+                        <div class="w-6 h-6 rounded-full border-2 border-dashed border-outline-variant flex items-center justify-center group-hover:scale-110 transition-transform swatch">
+                            <span class="material-symbols-outlined text-[14px] text-primary check" style="display:{{ old('color', $note->color) ? 'none' : '' }}">check</span>
+                        </div>
+                        <span class="text-[11px] font-medium text-secondary">None</span>
+                    </label>
+                    @foreach($colors as $name=>$hex)
+                    @php $sel = old('color', $note->color) === $name; @endphp
+                    <label class="flex flex-col items-center gap-1 cursor-pointer group" onclick="document.getElementById('color-input').value='{{ $name }}';document.querySelectorAll('#color-picker label .check').forEach(e=>e.style.display='none');document.querySelectorAll('#color-picker label .swatch').forEach(e=>e.style.outline='');this.querySelector('.check').style.display='';this.querySelector('.swatch').style.outline='2px solid #15157d';this.querySelector('.swatch').style.outlineOffset='2px'">
+                        <div class="w-6 h-6 rounded-full group-hover:scale-110 transition-transform relative flex items-center justify-center swatch" style="background:{{ $hex }};{{ $sel ? 'outline:2px solid #15157d;outline-offset:2px' : '' }}">
+                            <span class="material-symbols-outlined text-[14px] text-white check" style="display:{{ $sel ? '' : 'none' }}">check</span>
+                        </div>
+                        <span class="text-[11px] font-medium text-secondary">{{ ucfirst($name) }}</span>
+                    </label>
+                    @endforeach
+                </div>
             </div>
         </div>
 

@@ -10,7 +10,8 @@
         </a>
     </div>
 
-    <div class="bg-surface-container-low border border-outline-variant rounded-lg p-8">
+    <div class="border border-outline-variant rounded-lg p-8"
+         style="{{ $note->color_hex ? 'border-left:4px solid '.$note->color_hex.';background-color:'.$note->color_bg : '' }}">
         <div class="flex justify-between items-start mb-6">
             <div class="flex items-center gap-3">
                 <h2 class="font-headline-lg text-headline-lg-mobile md:text-headline-lg text-on-surface">{{ $note->title }}</h2>
@@ -33,8 +34,9 @@
         </div>
 
         @if($note->color)
-        <div class="mb-4">
-            <span class="bg-surface-container-highest px-3 py-1 rounded text-[10px] uppercase tracking-wider text-on-surface-variant border border-outline-variant" style="border-left: 4px solid {{ $note->color }};">{{ $note->color }}</span>
+        <div class="flex items-center gap-2 mb-4">
+            <div class="w-3 h-3 rounded-full" style="background:{{ $note->color_hex }}"></div>
+            <span class="text-[10px] uppercase tracking-wider text-secondary font-semibold">{{ $note->color }}</span>
         </div>
         @endif
 

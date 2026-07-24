@@ -19,6 +19,8 @@
 - Status count badge on todos tab navigation
 - Login page (single user with .env credentials)
 - App name from env (configurable via APP_NAME)
+- Note color (swatch picker, left border accent, background tint)
+- Note card component (x-note-card reused in index & dashboard)
 
 ## Current Scope (Included)
 
