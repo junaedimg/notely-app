@@ -56,13 +56,24 @@ Pin toggle tersedia langsung dari halaman **index** dan **show** tanpa harus mas
 
 ---
 
-## Soft Delete
+## Soft Delete, Restore & Permanent Delete
 
-Notes mendukung soft delete. Saat dihapus, data tidak langsung hilang dari database melainkan diberi timestamp `deleted_at`.
+Notes mendukung **soft delete**. Saat dihapus dari halaman show, data tidak langsung hilang dari database — hanya diberi timestamp `deleted_at`.
 
-- Delete dari halaman show → soft delete
-- Data yang sudah dihapus tidak muncul di index atau dashboard
-- (Fitur restore akan datang)
+### Alur
+
+| Aksi | Behavior |
+|------|----------|
+| **Delete** (dari show) | Soft delete → data masuk ke tab **Trash** |
+| **Restore** (dari tab Trash) | Kembalikan data ke daftar aktif |
+| **Delete Permanently** (dari tab Trash) | Hapus data dari database secara permanen (`forceDelete`) |
+
+### Tab Trash
+
+Terdapat di halaman index notes: tab **Trash** menampilkan semua notes yang sudah di-soft-delete.
+- Tombol **Restore** (icon `restore_from_trash`) — mengembalikan note
+- Tombol **Delete Permanently** (icon `delete_forever`) — hapus permanen dengan konfirmasi SweetAlert2
+- Jika trash kosong, menampilkan pesan "Trash is empty."
 
 ---
 

@@ -22,6 +22,7 @@
 - Note color (swatch picker, left border accent, background tint)
 - Note card component (x-note-card reused in index & dashboard)
 - SweetAlert2 modals (complete, skip, delete confirmations)
+- Trash tab on notes & todos (soft delete management, restore, permanent delete)
 
 ## Current Scope (Included)
 

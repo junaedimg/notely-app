@@ -118,6 +118,27 @@ Semua tombol delete (todo, note, history) juga menggunakan SweetAlert2:
 
 ---
 
+## Soft Delete, Restore & Permanent Delete
+
+Todos mendukung **soft delete**. Saat dihapus dari halaman index/show, data tidak langsung hilang — hanya diberi timestamp `deleted_at`.
+
+### Alur
+
+| Aksi | Behavior |
+|------|----------|
+| **Delete** (dari index/show) | Soft delete → data masuk ke tab **Trash** |
+| **Restore** (dari tab Trash) | Kembalikan data ke daftar aktif |
+| **Delete Permanently** (dari tab Trash) | Hapus data dari database secara permanen (`forceDelete`) |
+
+### Tab Trash
+
+Terdapat di halaman index todos: tab **Trash** menampilkan semua todos yang sudah di-soft-delete.
+- Tombol **Restore** (icon `restore_from_trash`) — mengembalikan todo
+- Tombol **Delete Permanently** (icon `delete_forever`) — hapus permanen dengan konfirmasi SweetAlert2
+- Jika trash kosong, menampilkan pesan "Trash is empty."
+
+---
+
 ## Soft Delete
 
 Todos mendukung soft delete. Saat dihapus, data tidak langsung hilang dari database melainkan diberi timestamp `deleted_at`.

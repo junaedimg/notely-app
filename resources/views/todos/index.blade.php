@@ -42,14 +42,14 @@
             <p class="font-body-md font-medium text-on-surface">{{ $todo->title }}</p>
             <span class="text-label-sm text-outline">Deleted {{ $todo->deleted_at->format('M d, Y g:i A') }}</span>
         </div>
-        <div class="flex items-center gap-3">
+        <div class="flex items-center gap-1">
             <form method="POST" action="{{ route('todos.restore', $todo->id) }}">
                 @csrf
-                <button class="text-primary font-label-sm text-label-sm hover:underline">Restore</button>
+                <button class="material-symbols-outlined text-secondary hover:text-primary active:scale-90 transition-all p-1.5 rounded-full hover:bg-surface-container-low text-sm" title="Restore">restore_from_trash</button>
             </form>
             <form method="POST" action="{{ route('todos.force-delete', $todo->id) }}">
                 @csrf @method('DELETE')
-                <button data-delete data-title="{{ $todo->title }}" class="text-error font-label-sm text-label-sm hover:underline">Delete</button>
+                <button data-delete data-title="{{ $todo->title }}" class="material-symbols-outlined text-secondary hover:text-error active:scale-90 transition-all p-1.5 rounded-full hover:bg-error-container text-sm" title="Delete permanently">delete_forever</button>
             </form>
         </div>
     </div>
