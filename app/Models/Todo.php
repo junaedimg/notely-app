@@ -55,22 +55,12 @@ class Todo extends Model
         return $this->hasMany(TodoHistory::class);
     }
 
+    // Internal keys only — labels, colors, icons are in App\View\Components\Quadrant (single source of truth)
     public function getQuadrantAttribute(): string
     {
-        if ($this->is_important && $this->is_urgent) return 'do';
-        if ($this->is_important && !$this->is_urgent) return 'decide';
-        if (!$this->is_important && $this->is_urgent) return 'delegate';
-        return 'delete';
-    }
-
-    public function getQuadrantColorAttribute(): string
-    {
-        return match ($this->quadrant) {
-            'do' => '#d32f2f',
-            'decide' => '#b45309',
-            'delegate' => '#2e7d32',
-            'delete' => '#1565c0',
-            default => 'transparent',
-        };
+        if ($this->is_important && $this->is_urgent) return 'priority1';     // Do
+        if ($this->is_important && !$this->is_urgent) return 'priority2';    // Schedule
+        if (!$this->is_important && $this->is_urgent) return 'priority3';    // Delegate
+        return 'priority4';                                                    // Eliminate
     }
 }

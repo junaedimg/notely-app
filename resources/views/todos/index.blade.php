@@ -63,8 +63,7 @@
 @else
 <div class="space-y-3">
     @forelse($todos as $todo)
-    <div class="bg-white p-4 border border-outline-variant rounded-lg shadow-sm hover:translate-x-0.5 transition-all group cursor-pointer"
-         style="border-left: 4px solid {{ $todo->quadrant_color }};">
+    <div class="bg-white p-4 border border-outline-variant rounded-lg shadow-sm hover:translate-x-0.5 transition-all group cursor-pointer border-l-quadrant-{{ \App\View\Components\Quadrant::get($todo->quadrant)['class'] }}">
         <div class="flex justify-between items-start mb-1.5">
             <div class="flex gap-2">
                 <x-quadrant :quadrant="$todo->quadrant" />

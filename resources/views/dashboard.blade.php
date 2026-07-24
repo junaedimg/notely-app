@@ -43,8 +43,7 @@
     </div>
     <div class="space-y-2.5 max-w-[720px]">
         @forelse($todayTodos as $todo)
-        <div class="bg-white p-4 border border-outline-variant rounded-lg shadow-sm hover:shadow-md transition-shadow group"
-             style="border-left: 4px solid {{ $todo->quadrant_color }};">
+        <div class="bg-white p-4 border border-outline-variant rounded-lg shadow-sm hover:shadow-md transition-shadow group border-l-quadrant-{{ \App\View\Components\Quadrant::get($todo->quadrant)['class'] }}">
             <div class="flex justify-between items-start mb-1.5">
                 <div class="flex gap-2">
                     <x-quadrant :quadrant="$todo->quadrant" />
@@ -52,7 +51,7 @@
                 @if($todo->repeat_type !== 'none')
                 <div class="flex items-center gap-1 text-on-surface-variant group-hover:text-primary shrink-0">
                     <span class="material-symbols-outlined text-[14px]">refresh</span>
-                    <span class="font-label-sm text-[9px] capitalize">{{ $todo->repeat_type }}</span>
+                    <span class="font-label-sm text-[9px] capitalize">{{ $todo->repeat_type }} {{ $todo->quadrant }}</span>
                 </div>
                 @endif
             </div>

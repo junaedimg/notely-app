@@ -223,24 +223,27 @@ The quadrant is calculated automatically at runtime (computed attribute, never s
 
 ### Quadrant Mapping
 
-| Important | Urgent | Quadrant | Label | Color |
-|-----------|--------|----------|-------|-------|
-| Yes | Yes | `do` | Do | 🔴 Red |
-| Yes | No | `decide` | Decide | 🟡 Yellow |
-| No | Yes | `delegate` | Delegate | 🟢 Green |
-| No | No | `delete` | Delete | 🔵 Blue |
+| Important | Urgent | Internal Key | Label | Color |
+|-----------|--------|--------------|-------|-------|
+| Yes | Yes | `priority1` | Do | 🟢 Green |
+| Yes | No | `priority2` | Schedule | 🟡 Yellow |
+| No | Yes | `priority3` | Delegate | 🔵 Blue |
+| No | No | `priority4` | Eliminate | 🔴 Red |
+
+> All colors are defined in `resources/css/app.css` (single source of truth). Labels & icons are in `app/View/Components/Quadrant.php`. Internal keys in `app/Models/Todo.php`.
 
 ### Visual
 
 Setiap card todo memiliki:
-1. **Left border accent** — 4px solid color sesuai kuadran
+1. **Left border accent** — 4px solid via `class="border-l-quadrant-{class}"` (CSS single source)
 2. **Badge** — rounded-full dengan icon + label per kuadran
 
-Warna diambil dari `$todo->quadrant_color` (computed attribute di model), bukan disimpan di database.
+Data diambil dari `App\View\Components\Quadrant` (PHP), warna dari `resources/css/app.css` (CSS).
 
 ### UI Components
 
 ```
-Component: <x-quadrant :quadrant="$todo->quadrant" />
-Color:      $todo->quadrant_color → hex color string
+<x-quadrant :quadrant="$todo->quadrant" />
 ```
+Badge class: `bg-quadrant-{c} text-quadrant-{c} border border-quadrant-{c}`  
+Card border: `border-l-quadrant-{\App\View\Components\Quadrant::get($todo->quadrant)['class']}`

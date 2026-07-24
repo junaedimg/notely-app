@@ -10,7 +10,7 @@
         </a>
     </div>
 
-    <div class="bg-surface-container-low border border-outline-variant rounded-lg p-8">
+    <div class="bg-surface-container-low border border-outline-variant rounded-lg p-8 border-l-quadrant-{{ \App\View\Components\Quadrant::get($todo->quadrant)['class'] }}">
         <div class="flex justify-between items-start mb-4">
             <div>
                 <div class="flex gap-2 mb-3">
