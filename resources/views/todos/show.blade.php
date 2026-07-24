@@ -20,9 +20,9 @@
             </div>
             <div class="flex items-center gap-2">
                 <a href="{{ route('todos.edit', $todo) }}" class="material-symbols-outlined text-secondary p-2 hover:bg-surface-container-low rounded-full">edit</a>
-                <form method="POST" action="{{ route('todos.destroy', $todo) }}" onsubmit="return confirm('Delete this todo?')">
+                <form method="POST" action="{{ route('todos.destroy', $todo) }}">
                     @csrf @method('DELETE')
-                    <button class="material-symbols-outlined text-error p-2 hover:bg-error-container rounded-full">delete</button>
+                    <button data-delete data-title="{{ $todo->title }}" class="material-symbols-outlined text-error p-2 hover:bg-error-container rounded-full">delete</button>
                 </form>
             </div>
         </div>
@@ -43,9 +43,9 @@
         </div>
 
         <div class="flex gap-3 mt-8">
-            <button data-complete data-action="{{ route('todos.complete', $todo) }}" class="bg-primary text-on-primary px-6 py-2.5 rounded-lg font-label-sm text-label-sm hover:brightness-110 active:scale-95 transition-all">Complete</button>
+            <button data-complete data-action="{{ route('todos.complete', $todo) }}" data-title="{{ $todo->title }}" class="bg-primary text-on-primary px-6 py-2.5 rounded-lg font-label-sm text-label-sm hover:brightness-110 active:scale-95 transition-all">Complete</button>
             @if($todo->repeat_type !== 'none')
-            <button data-skip data-action="{{ route('todos.skip', $todo) }}" class="px-6 py-2.5 rounded-lg border border-outline-variant font-label-sm text-label-sm text-on-surface hover:bg-surface-container-low transition-all">Skip</button>
+            <button data-skip data-action="{{ route('todos.skip', $todo) }}" data-title="{{ $todo->title }}" class="px-6 py-2.5 rounded-lg border border-outline-variant font-label-sm text-label-sm text-on-surface hover:bg-surface-container-low transition-all">Skip</button>
             @endif
         </div>
     </div>

@@ -38,9 +38,9 @@
                         <h3 class="font-headline-md text-on-surface leading-tight @if($history->skipped_at) line-through opacity-70 text-secondary @endif">{{ $history->todo->title ?? 'Deleted Todo' }}</h3>
                         <div class="flex items-center gap-2">
                             <span class="text-outline font-label-sm bg-surface-container-low px-2 py-0.5 rounded">{{ $history->created_at->format('H:i') }}</span>
-                            <form method="POST" action="{{ route('history.destroy', $history) }}" onsubmit="return confirm('Delete this history record?')">
+                            <form method="POST" action="{{ route('history.destroy', $history) }}">
                                 @csrf @method('DELETE')
-                                <button class="material-symbols-outlined text-outline text-[16px] p-1 hover:bg-error-container hover:text-error rounded-full">delete</button>
+                                <button data-delete data-title="this history record" class="material-symbols-outlined text-outline text-[16px] p-1 hover:bg-error-container hover:text-error rounded-full">delete</button>
                             </form>
                         </div>
                     </div>

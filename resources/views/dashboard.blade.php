@@ -67,8 +67,8 @@
                 </div>
                 @endif
                 <div class="flex items-center gap-2 ml-auto">
-                    <button data-skip data-action="{{ route('todos.skip', $todo) }}" class="material-symbols-outlined text-secondary text-[18px] p-1 hover:bg-surface-container-low rounded-full" title="Skip">skip_next</button>
-                    <button data-complete data-action="{{ route('todos.complete', $todo) }}" class="material-symbols-outlined text-secondary text-[18px] p-1 hover:bg-primary-fixed rounded-full hover:text-primary" title="Complete">check_circle</button>
+                    <button data-skip data-action="{{ route('todos.skip', $todo) }}" data-title="{{ $todo->title }}" class="material-symbols-outlined text-secondary text-[18px] p-1 hover:bg-surface-container-low rounded-full" title="Skip">skip_next</button>
+                    <button data-complete data-action="{{ route('todos.complete', $todo) }}" data-title="{{ $todo->title }}" class="material-symbols-outlined text-secondary text-[18px] p-1 hover:bg-primary-fixed rounded-full hover:text-primary" title="Complete">check_circle</button>
                 </div>
             </div>
         </div>

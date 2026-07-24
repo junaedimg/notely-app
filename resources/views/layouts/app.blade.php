@@ -11,6 +11,7 @@
     @fonts
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <style>@media (max-width:767px){.sm-hide{display:none!important}}</style>
 </head>
 <body class="bg-background font-body-md text-on-surface selection:bg-primary-container selection:text-on-primary-container min-h-screen">
@@ -97,27 +98,99 @@
         document.querySelectorAll('[data-complete]').forEach(btn => {
             btn.addEventListener('click', function(e) {
                 e.preventDefault();
-                const note = prompt('Completion note (optional):');
-                if (note === null) return;
-                const form = document.createElement('form');
-                form.method = 'POST';
-                form.action = this.dataset.action;
-                form.innerHTML = '@csrf' + (note ? '<input name="completion_note" value="' + note + '">' : '') + '<input name="_redirect" value="' + currentUrl + '">';
-                document.body.appendChild(form);
-                form.submit();
+                const title = this.dataset.title || 'Complete this todo';
+                const date = '{{ \Carbon\Carbon::parse(session("simulated_today", now()))->format("l, d F Y") }}';
+
+                Swal.fire({
+                    title: '✅ Complete',
+                    html: `<div class="text-left">
+                        <p class="font-semibold text-base mb-1">${title}</p>
+                        <p class="text-sm text-gray-500">📅 ${date}</p>
+                        <div class="mt-4">
+                            <label class="text-xs font-semibold text-gray-500 uppercase tracking-wider">Completion note (optional)</label>
+                            <textarea id="swal-note" class="w-full border border-gray-300 rounded-lg p-3 mt-1 text-sm focus:outline-none focus:border-blue-500" rows="2"></textarea>
+                        </div>
+                    </div>`,
+                    showCancelButton: true,
+                    confirmButtonText: 'Complete',
+                    cancelButtonText: 'Cancel',
+                    confirmButtonColor: '#15157d',
+                    cancelButtonColor: '#6b7280',
+                    customClass: { popup: 'rounded-xl' },
+                    preConfirm: () => {
+                        return document.getElementById('swal-note').value;
+                    }
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        const note = result.value;
+                        const form = document.createElement('form');
+                        form.method = 'POST';
+                        form.action = this.dataset.action;
+                        form.innerHTML = '@csrf' + (note ? '<input name="completion_note" value="' + note + '">' : '') + '<input name="_redirect" value="' + currentUrl + '">';
+                        document.body.appendChild(form);
+                        form.submit();
+                    }
+                });
             });
         });
         document.querySelectorAll('[data-skip]').forEach(btn => {
             btn.addEventListener('click', function(e) {
                 e.preventDefault();
-                if (confirm('Skip this todo?')) {
-                    const form = document.createElement('form');
-                    form.method = 'POST';
-                    form.action = this.dataset.action;
-                    form.innerHTML = '@csrf' + '<input name="_redirect" value="' + currentUrl + '">';
-                    document.body.appendChild(form);
-                    form.submit();
-                }
+                const title = this.dataset.title || 'Skip this todo';
+                const date = '{{ \Carbon\Carbon::parse(session("simulated_today", now()))->format("l, d F Y") }}';
+
+                Swal.fire({
+                    title: '⏭ Skip',
+                    html: `<div class="text-left">
+                        <p class="font-semibold text-base mb-1">${title}</p>
+                        <p class="text-sm text-gray-500">📅 ${date}</p>
+                        <div class="mt-4">
+                            <label class="text-xs font-semibold text-gray-500 uppercase tracking-wider">Reason (optional)</label>
+                            <textarea id="swal-note" class="w-full border border-gray-300 rounded-lg p-3 mt-1 text-sm focus:outline-none focus:border-blue-500" rows="2"></textarea>
+                        </div>
+                    </div>`,
+                    showCancelButton: true,
+                    confirmButtonText: 'Skip',
+                    cancelButtonText: 'Cancel',
+                    confirmButtonColor: '#d32f2f',
+                    cancelButtonColor: '#6b7280',
+                    customClass: { popup: 'rounded-xl' },
+                    preConfirm: () => {
+                        return document.getElementById('swal-note').value;
+                    }
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        const note = result.value;
+                        const form = document.createElement('form');
+                        form.method = 'POST';
+                        form.action = this.dataset.action;
+                        form.innerHTML = '@csrf' + (note ? '<input name="completion_note" value="' + note + '">' : '') + '<input name="_redirect" value="' + currentUrl + '">';
+                        document.body.appendChild(form);
+                        form.submit();
+                    }
+                });
+            });
+        });
+        document.querySelectorAll('[data-delete]').forEach(btn => {
+            btn.addEventListener('click', function(e) {
+                e.preventDefault();
+                const title = this.dataset.title || 'this item';
+                const form = this.closest('form');
+
+                Swal.fire({
+                    title: 'Delete',
+                    html: `<p class="text-base">Are you sure you want to delete <strong>${title}</strong>?</p><p class="text-sm text-gray-500 mt-1">This action cannot be undone.</p>`,
+                    showCancelButton: true,
+                    confirmButtonText: 'Delete',
+                    cancelButtonText: 'Cancel',
+                    confirmButtonColor: '#d32f2f',
+                    cancelButtonColor: '#6b7280',
+                    customClass: { popup: 'rounded-xl' },
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        form.submit();
+                    }
+                });
             });
         });
     </script>

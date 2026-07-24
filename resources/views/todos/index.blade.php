@@ -60,13 +60,13 @@
             @endif
             <div class="flex items-center gap-2 ml-auto">
                 @if($todo->repeat_type !== 'none')
-                <button data-skip data-action="{{ route('todos.skip', $todo) }}" class="material-symbols-outlined text-secondary text-[18px] p-1 hover:bg-surface-container-low rounded-full" title="Skip">skip_next</button>
+                <button data-skip data-action="{{ route('todos.skip', $todo) }}" data-title="{{ $todo->title }}" class="material-symbols-outlined text-secondary text-[18px] p-1 hover:bg-surface-container-low rounded-full" title="Skip">skip_next</button>
                 @endif
-                <button data-complete data-action="{{ route('todos.complete', $todo) }}" class="material-symbols-outlined text-secondary text-[18px] p-1 hover:bg-primary-fixed rounded-full hover:text-primary" title="Complete">check_circle</button>
+                <button data-complete data-action="{{ route('todos.complete', $todo) }}" data-title="{{ $todo->title }}" class="material-symbols-outlined text-secondary text-[18px] p-1 hover:bg-primary-fixed rounded-full hover:text-primary" title="Complete">check_circle</button>
                 <a href="{{ route('todos.edit', $todo) }}" class="material-symbols-outlined text-secondary text-[18px] p-1 hover:bg-surface-container-low rounded-full">edit</a>
-                <form method="POST" action="{{ route('todos.destroy', $todo) }}" onsubmit="return confirm('Delete this todo?')" class="inline">
+                <form method="POST" action="{{ route('todos.destroy', $todo) }}" class="inline">
                     @csrf @method('DELETE')
-                    <button class="material-symbols-outlined text-secondary text-[18px] p-1 hover:bg-error-container rounded-full hover:text-error">delete</button>
+                    <button data-delete data-title="{{ $todo->title }}" class="material-symbols-outlined text-secondary text-[18px] p-1 hover:bg-error-container rounded-full hover:text-error">delete</button>
                 </form>
             </div>
         </div>
