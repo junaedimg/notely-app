@@ -28,7 +28,7 @@
                 <a href="{{ route('notes.edit', $note) }}" class="material-symbols-outlined text-secondary p-2 hover:bg-surface-container-low rounded-full">edit</a>
                 <form method="POST" action="{{ route('notes.destroy', $note) }}">
                     @csrf @method('DELETE')
-                    <button data-delete data-title="{{ $note->title }}" class="material-symbols-outlined text-error p-2 hover:bg-error-container rounded-full">delete</button>
+                    <button data-delete data-type="soft" data-title="{{ $note->title }}" class="material-symbols-outlined text-error p-2 hover:bg-error-container rounded-full">delete</button>
                 </form>
             </div>
         </div>

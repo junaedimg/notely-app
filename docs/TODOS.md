@@ -137,6 +137,15 @@ Terdapat di halaman index todos: tab **Trash** menampilkan semua todos yang suda
 - Tombol **Delete Permanently** (icon `delete_forever`) — hapus permanen dengan konfirmasi SweetAlert2
 - Jika trash kosong, menampilkan pesan "Trash is empty."
 
+### Efek ke History
+
+| Aksi Todo | Efek ke Histories |
+|-----------|------------------|
+| **Soft delete** | Histories tetap ada. Di halaman History, todo title tetap muncul dengan label **· Trashed** |
+| **Force delete** | Histories tetap ada karena FK `nullOnDelete`. `todo_id` menjadi NULL, title berubah menjadi "Deleted Todo" |
+| **Restore** | Histories kembali terhubung secara normal, label "· Trashed" hilang |
+- Jika trash kosong, menampilkan pesan "Trash is empty."
+
 ---
 
 ## Soft Delete

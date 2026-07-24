@@ -37,11 +37,11 @@
         <div class="flex items-center gap-1">
             <form method="POST" action="{{ route('notes.restore', $note->id) }}">
                 @csrf
-                <button class="material-symbols-outlined text-secondary hover:text-primary active:scale-90 transition-all p-1.5 rounded-full hover:bg-surface-container-low text-sm" title="Restore">restore_from_trash</button>
+                <button data-restore data-title="{{ $note->title }}" class="material-symbols-outlined text-secondary hover:text-primary active:scale-90 transition-all p-1.5 rounded-full hover:bg-surface-container-low text-sm" title="Restore">restore_from_trash</button>
             </form>
             <form method="POST" action="{{ route('notes.force-delete', $note->id) }}">
                 @csrf @method('DELETE')
-                <button data-delete data-title="{{ $note->title }}" class="material-symbols-outlined text-secondary hover:text-error active:scale-90 transition-all p-1.5 rounded-full hover:bg-error-container text-sm" title="Delete permanently">delete_forever</button>
+                <button data-delete data-type="hard" data-title="{{ $note->title }}" class="material-symbols-outlined text-secondary hover:text-error active:scale-90 transition-all p-1.5 rounded-full hover:bg-error-container text-sm" title="Delete permanently">delete_forever</button>
             </form>
         </div>
     </div>

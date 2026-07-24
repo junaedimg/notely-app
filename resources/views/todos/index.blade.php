@@ -45,11 +45,11 @@
         <div class="flex items-center gap-1">
             <form method="POST" action="{{ route('todos.restore', $todo->id) }}">
                 @csrf
-                <button class="material-symbols-outlined text-secondary hover:text-primary active:scale-90 transition-all p-1.5 rounded-full hover:bg-surface-container-low text-sm" title="Restore">restore_from_trash</button>
+                <button data-restore data-title="{{ $todo->title }}" class="material-symbols-outlined text-secondary hover:text-primary active:scale-90 transition-all p-1.5 rounded-full hover:bg-surface-container-low text-sm" title="Restore">restore_from_trash</button>
             </form>
             <form method="POST" action="{{ route('todos.force-delete', $todo->id) }}">
                 @csrf @method('DELETE')
-                <button data-delete data-title="{{ $todo->title }}" class="material-symbols-outlined text-secondary hover:text-error active:scale-90 transition-all p-1.5 rounded-full hover:bg-error-container text-sm" title="Delete permanently">delete_forever</button>
+                <button data-delete data-type="hard" data-title="{{ $todo->title }}" class="material-symbols-outlined text-secondary hover:text-error active:scale-90 transition-all p-1.5 rounded-full hover:bg-error-container text-sm" title="Delete permanently">delete_forever</button>
             </form>
         </div>
     </div>
@@ -97,7 +97,7 @@
                 <a href="{{ route('todos.edit', $todo) }}" class="material-symbols-outlined text-secondary text-[18px] p-1 hover:bg-surface-container-low rounded-full">edit</a>
                 <form method="POST" action="{{ route('todos.destroy', $todo) }}" class="inline">
                     @csrf @method('DELETE')
-                    <button data-delete data-title="{{ $todo->title }}" class="material-symbols-outlined text-secondary text-[18px] p-1 hover:bg-error-container rounded-full hover:text-error">delete</button>
+                    <button data-delete data-type="soft" data-title="{{ $todo->title }}" class="material-symbols-outlined text-secondary text-[18px] p-1 hover:bg-error-container rounded-full hover:text-error">delete</button>
                 </form>
             </div>
         </div>

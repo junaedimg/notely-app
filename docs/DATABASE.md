@@ -300,7 +300,7 @@ Menyimpan riwayat penyelesaian Todo. Satu Todo dapat memiliki banyak History.
 | Field | Type | Description |
 |-------|------|-------------|
 | `id` | bigint | Primary Key |
-| `todo_id` | bigint FK | Foreign Key ke Todo |
+| `todo_id` | bigint FK | Foreign Key ke Todo (nullable, `nullOnDelete`) |
 | `due_at` | timestamp | Jadwal seharusnya |
 | `completed_at` | timestamp | Tanggal selesai |
 | `skipped_at` | timestamp | Tanggal dilewati |

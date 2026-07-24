@@ -175,15 +175,50 @@
             btn.addEventListener('click', function(e) {
                 e.preventDefault();
                 const title = this.dataset.title || 'this item';
+                const type = this.dataset.type || 'soft';
                 const form = this.closest('form');
+
+                let msg, confirmBtn;
+                if (type === 'hard') {
+                    msg = `<p class="text-base">Are you sure you want to permanently delete <strong>${title}</strong>?</p><p class="text-sm text-gray-500 mt-1">This will remove the data from the database forever. This action cannot be undone.</p>`;
+                    confirmBtn = 'Delete Permanently';
+                } else if (type === 'history') {
+                    msg = `<p class="text-base">Are you sure you want to delete this history record?</p><p class="text-sm text-gray-500 mt-1">This action cannot be undone.</p>`;
+                    confirmBtn = 'Delete';
+                } else {
+                    msg = `<p class="text-base">Move <strong>${title}</strong> to trash?</p><p class="text-sm text-gray-500 mt-1">You can restore it later from the Trash tab.</p>`;
+                    confirmBtn = 'Move to Trash';
+                }
 
                 Swal.fire({
                     title: 'Delete',
-                    html: `<p class="text-base">Are you sure you want to delete <strong>${title}</strong>?</p><p class="text-sm text-gray-500 mt-1">This action cannot be undone.</p>`,
+                    html: msg,
                     showCancelButton: true,
-                    confirmButtonText: 'Delete',
+                    confirmButtonText: confirmBtn,
                     cancelButtonText: 'Cancel',
                     confirmButtonColor: '#d32f2f',
+                    cancelButtonColor: '#6b7280',
+                    customClass: { popup: 'rounded-xl' },
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        form.submit();
+                    }
+                });
+            });
+        });
+        document.querySelectorAll('[data-restore]').forEach(btn => {
+            btn.addEventListener('click', function(e) {
+                e.preventDefault();
+                const title = this.dataset.title || 'this item';
+                const form = this.closest('form');
+
+                Swal.fire({
+                    title: 'Restore',
+                    html: `<p class="text-base">Move <strong>${title}</strong> back to your active list?</p>`,
+                    showCancelButton: true,
+                    confirmButtonText: 'Restore',
+                    cancelButtonText: 'Cancel',
+                    confirmButtonColor: '#15157d',
                     cancelButtonColor: '#6b7280',
                     customClass: { popup: 'rounded-xl' },
                 }).then((result) => {

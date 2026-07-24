@@ -23,6 +23,9 @@
 - Note card component (x-note-card reused in index & dashboard)
 - SweetAlert2 modals (complete, skip, delete confirmations)
 - Trash tab on notes & todos (soft delete management, restore, permanent delete)
+- History shows "· Trashed" label for deleted todo
+- SweetAlert2 confirmation for all delete/restore actions
+- Database seeders with comprehensive test data
 
 ## Current Scope (Included)
 

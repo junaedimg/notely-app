@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\TodoHistory;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\View\View;
 
 class HistoryController extends Controller
@@ -13,7 +14,9 @@ class HistoryController extends Controller
     {
         $filter = $request->get('filter', 'all');
 
-        $histories = TodoHistory::with('todo')
+        $histories = TodoHistory::with(['todo' => function ($q) {
+                $q->withTrashed();
+            }])
             ->when($filter === 'completed', function ($q) {
                 return $q->whereNotNull('completed_at');
             })
