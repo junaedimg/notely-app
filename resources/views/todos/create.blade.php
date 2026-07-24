@@ -42,15 +42,17 @@
 
         <div class="grid grid-cols-2 gap-6">
             <label class="flex items-center gap-3 cursor-pointer">
+                <input type="hidden" name="is_important" value="0">
                 <input type="checkbox" name="is_important" value="1" class="w-5 h-5 rounded border-outline-variant text-primary focus:ring-primary">
                 <span class="font-body-md text-on-surface">Important</span>
-                <x-tooltip position="left-1/2 -translate-x-1/2">Pekerjaan berdampak besar
+                <x-tooltip position="left-1/2 -translate-x-1/2">Besar dampaknya
 Contoh: bayar cicilan, laporan pajak</x-tooltip>
             </label>
             <label class="flex items-center gap-3 cursor-pointer">
+                <input type="hidden" name="is_urgent" value="0">
                 <input type="checkbox" name="is_urgent" value="1" class="w-5 h-5 rounded border-outline-variant text-primary focus:ring-primary">
                 <span class="font-body-md text-on-surface">Urgent</span>
-                <x-tooltip position="left-1/2 -translate-x-1/2">Pekerjaan butuh perhatian segera
+                <x-tooltip position="left-1/2 -translate-x-1/2">Butuh perhatian segera
 Contoh: deadline hari ini, darurat</x-tooltip>
             </label>
         </div>

@@ -28,7 +28,7 @@
                     <button type="submit" form="date-form" class="bg-primary text-on-primary px-2 py-0.5 rounded-lg font-label-sm text-[10px] hover:brightness-110 active:scale-95 transition-all">Set</button>
                     <form method="POST" action="{{ route('dashboard.reset-today') }}" class="flex">
                         @csrf
-                        <button type="submit" class="text-[10px] font-label-sm text-secondary hover:text-primary px-1">Reset</button>
+                        <button type="submit" class="text-[10px] font-label-sm text-secondary hover:text-primary px-1">Reset Today</button>
                     </form>
                 </div>
                 @endif

@@ -30,7 +30,13 @@ class TodoController extends Controller
             ->orderBy('is_important', 'desc')
             ->get();
 
-        return view('todos.index', compact('todos', 'tab'));
+        $counts = [
+            'active' => Todo::where('status', 'active')->count(),
+            'paused' => Todo::where('status', 'paused')->count(),
+            'archived' => Todo::where('status', 'archived')->count(),
+        ];
+
+        return view('todos.index', compact('todos', 'tab', 'counts'));
     }
 
     public function create(): View

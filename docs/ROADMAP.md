@@ -2,17 +2,20 @@
 
 ## Completed
 
-- Notes (CRUD + Pin toggle)
-- Todos (CRUD + Complete/Skip)
+- Notes (CRUD + Pin toggle + Soft Delete)
+- Todos (CRUD + Complete/Skip + Soft Delete)
 - Todo History (index + delete)
 - Reminder field (UI only, fitur notifikasi akan datang)
 - Repeat (daily, weekly, monthly, yearly, interval)
 - Weekly with days_of_week (nextWeekdayFromList scheduler)
 - End type (never, date, count with show/hide)
 - Scheduler (schedule-based & completion-based anchor)
-- Eisenhower Matrix (computed attribute, not stored)
+- Eisenhower Matrix (computed attribute, 4 quadrants with color coding, badge component)
 - Single user (auth/user model removed)
 - Date navigation (change displayed date via top bar date picker)
+- Dashboard calendar (2-week view with dot indicators and day detail panel)
+- Layout wrapper (consistent max-width for header, main, nav across all pages)
+- Status count badge on todos tab navigation
 
 ## Current Scope (Included)
 
@@ -23,13 +26,16 @@
 - Repeat
 - Scheduler
 - Eisenhower Matrix
+- Dashboard Calendar
 
 ## Future
 
-- Calendar view
+- Calendar view (month/year)
 - Projects / task groups
 - Tags
 - AI suggestions
 - Attachments
 - Collaboration (multi-user)
 - Notifications / reminder alerts
+- Trash / restore (soft delete management)
+- Reports & statistics

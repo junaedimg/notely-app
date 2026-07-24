@@ -5,9 +5,11 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Todo extends Model
 {
+    use SoftDeletes;
     protected $fillable = [
         'note_id',
         'title',
@@ -56,8 +58,19 @@ class Todo extends Model
     public function getQuadrantAttribute(): string
     {
         if ($this->is_important && $this->is_urgent) return 'do';
-        if ($this->is_important && !$this->is_urgent) return 'plan';
+        if ($this->is_important && !$this->is_urgent) return 'decide';
         if (!$this->is_important && $this->is_urgent) return 'delegate';
-        return 'eliminate';
+        return 'delete';
+    }
+
+    public function getQuadrantColorAttribute(): string
+    {
+        return match ($this->quadrant) {
+            'do' => '#d32f2f',
+            'decide' => '#b45309',
+            'delegate' => '#2e7d32',
+            'delete' => '#1565c0',
+            default => 'transparent',
+        };
     }
 }

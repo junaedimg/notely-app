@@ -96,6 +96,46 @@
     --spacing-margin-desktop: 40px;
 }
 
+@utility text-quadrant-do {
+    color: #d32f2f;
+}
+@utility bg-quadrant-do {
+    background-color: #fef2f2;
+}
+@utility border-quadrant-do {
+    border-color: #fca5a5;
+}
+
+@utility text-quadrant-decide {
+    color: #b45309;
+}
+@utility bg-quadrant-decide {
+    background-color: #fffbeb;
+}
+@utility border-quadrant-decide {
+    border-color: #fcd34d;
+}
+
+@utility text-quadrant-delegate {
+    color: #2e7d32;
+}
+@utility bg-quadrant-delegate {
+    background-color: #f0fdf4;
+}
+@utility border-quadrant-delegate {
+    border-color: #86efac;
+}
+
+@utility text-quadrant-delete {
+    color: #1565c0;
+}
+@utility bg-quadrant-delete {
+    background-color: #eff6ff;
+}
+@utility border-quadrant-delete {
+    border-color: #93c5fd;
+}
+
 @utility font-headline-lg {
     font-family: var(--font-headline);
     font-size: var(--font-size-headline-lg);

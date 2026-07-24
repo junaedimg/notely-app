@@ -101,3 +101,18 @@ This ensures all selected days get their turn, not just one day per week.
 If `next_due_at` is empty:
 - **No repeat**: todo appears on dashboard (via `whereNull('next_due_at') AND completed_count = 0`)
 - **With repeat**: anchor falls back to `current_today()` for the first calculation
+
+---
+
+## Dashboard Calendar
+
+Dashboard menampilkan **2-week calendar view** (minggu ini + minggu depan) dengan dot indicators:
+
+| Dot | Color | Meaning |
+|-----|-------|---------|
+| ● | Biru (primary) | Ada planned todo |
+| ● | Hijau | Ada completed |
+| ● | Oranye | Ada skipped |
+| ● | Merah | Ada overdue |
+
+Navigasi ◀ ▶ bergeser 2 minggu. Klik tanggal menampilkan detail panel (planned, completed, skipped, overdue).

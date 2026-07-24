@@ -74,6 +74,14 @@ Menentukan apakah Note dipin agar muncul di bagian atas. Bisa di-toggle langsung
 
 ---
 
+### deleted_at
+
+**Type**: timestamp (nullable)
+
+Soft delete. Data tidak langsung hilang saat dihapus, hanya ditandai dengan timestamp.
+
+---
+
 ### color
 
 **Type**: varchar(20)
@@ -273,6 +281,14 @@ Timestamp standar.
 
 ---
 
+### deleted_at
+
+**Type**: timestamp (nullable)
+
+Soft delete untuk Todo.
+
+---
+
 # Table: todo_histories
 
 ## Purpose
@@ -346,3 +362,5 @@ Tidak ada tabel Users. Aplikasi single-user tanpa autentikasi.
 - Eisenhower Matrix dihitung dari `is_important` dan `is_urgent`.
 - Quadrant **tidak disimpan** di database.
 - UI menampilkan hasil perhitungan Scheduler, bukan seluruh data Todo.
+- Notes & Todos mendukung **soft delete** (`deleted_at`). Data tidak langsung hilang.
+- Halaman index & dashboard secara otomatis mengecualikan data yang sudah di-soft-delete.

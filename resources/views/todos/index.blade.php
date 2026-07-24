@@ -16,29 +16,30 @@
 </div>
 
 <nav class="flex gap-8 mb-8 border-b border-outline-variant">
-    <a href="{{ route('todos.index', ['tab' => 'active']) }}" class="pb-3 font-label-sm text-label-sm uppercase tracking-widest transition-all {{ $tab === 'active' ? 'text-primary border-b-2 border-primary' : 'text-on-surface-variant hover:text-primary' }}">Active</a>
-    <a href="{{ route('todos.index', ['tab' => 'paused']) }}" class="pb-3 font-label-sm text-label-sm uppercase tracking-widest transition-all {{ $tab === 'paused' ? 'text-primary border-b-2 border-primary' : 'text-on-surface-variant hover:text-primary' }}">Paused</a>
-    <a href="{{ route('todos.index', ['tab' => 'archived']) }}" class="pb-3 font-label-sm text-label-sm uppercase tracking-widest transition-all {{ $tab === 'archived' ? 'text-primary border-b-2 border-primary' : 'text-on-surface-variant hover:text-primary' }}">Archived</a>
+    <a href="{{ route('todos.index', ['tab' => 'active']) }}" class="pb-3 font-label-sm text-label-sm uppercase tracking-widest transition-all flex items-center gap-2 {{ $tab === 'active' ? 'text-primary border-b-2 border-primary' : 'text-on-surface-variant hover:text-primary' }}">
+        Active
+        <span class="text-[10px] {{ $tab === 'active' ? 'bg-primary-fixed text-primary' : 'bg-surface-container-low text-on-surface-variant' }} px-1.5 py-0.5 rounded-full font-bold">{{ $counts['active'] }}</span>
+    </a>
+    <a href="{{ route('todos.index', ['tab' => 'paused']) }}" class="pb-3 font-label-sm text-label-sm uppercase tracking-widest transition-all flex items-center gap-2 {{ $tab === 'paused' ? 'text-primary border-b-2 border-primary' : 'text-on-surface-variant hover:text-primary' }}">
+        Paused
+        <span class="text-[10px] {{ $tab === 'paused' ? 'bg-primary-fixed text-primary' : 'bg-surface-container-low text-on-surface-variant' }} px-1.5 py-0.5 rounded-full font-bold">{{ $counts['paused'] }}</span>
+    </a>
+    <a href="{{ route('todos.index', ['tab' => 'archived']) }}" class="pb-3 font-label-sm text-label-sm uppercase tracking-widest transition-all flex items-center gap-2 {{ $tab === 'archived' ? 'text-primary border-b-2 border-primary' : 'text-on-surface-variant hover:text-primary' }}">
+        Archived
+        <span class="text-[10px] {{ $tab === 'archived' ? 'bg-primary-fixed text-primary' : 'bg-surface-container-low text-on-surface-variant' }} px-1.5 py-0.5 rounded-full font-bold">{{ $counts['archived'] }}</span>
+    </a>
 </nav>
 
 <div class="space-y-4">
     @forelse($todos as $todo)
-    <div class="bg-surface-container-lowest p-5 border border-outline-variant rounded-lg shadow-sm hover:translate-x-1 transition-all group cursor-pointer">
+    <div class="bg-white p-5 border border-outline-variant rounded-lg shadow-sm hover:translate-x-1 transition-all group cursor-pointer"
+         style="border-left: 4px solid {{ $todo->quadrant_color }};">
         <div class="flex justify-between items-start mb-2">
-            <div class="flex gap-2 flex-wrap">
-                @if($todo->is_urgent && $todo->is_important)
-                <span class="px-2 py-0.5 rounded-sm border border-error text-error font-label-sm text-[10px] uppercase">Urgent</span>
-                <span class="px-2 py-0.5 rounded-sm border border-primary text-primary font-label-sm text-[10px] uppercase">Important</span>
-                @elseif($todo->is_important)
-                <span class="px-2 py-0.5 rounded-sm border border-primary text-primary font-label-sm text-[10px] uppercase">Important</span>
-                @elseif($todo->is_urgent)
-                <span class="px-2 py-0.5 rounded-sm border border-error text-error font-label-sm text-[10px] uppercase">Urgent</span>
-                @else
-                <span class="px-2 py-0.5 rounded-sm border border-outline-variant text-on-surface-variant font-label-sm text-[10px] uppercase">Normal</span>
-                @endif
+            <div class="flex gap-2">
+                <x-quadrant :quadrant="$todo->quadrant" />
             </div>
             @if($todo->repeat_type !== 'none')
-            <div class="flex items-center gap-1 text-on-surface-variant group-hover:text-primary">
+            <div class="flex items-center gap-1 text-on-surface-variant group-hover:text-primary shrink-0">
                 <span class="material-symbols-outlined text-[16px]">refresh</span>
                 <span class="font-label-sm text-[10px] capitalize">{{ $todo->repeat_type }}</span>
             </div>
@@ -47,7 +48,7 @@
 
         <h3 class="font-headline-md text-headline-md text-on-surface mb-1">{{ $todo->title }}</h3>
         @if($todo->description)
-        <p class="text-on-surface-variant font-body-md mb-4">{{ Str::limit($todo->description, 120) }}</p>
+        <p class="text-on-surface-variant font-body-md mb-4 whitespace-pre-line">{{ Str::limit($todo->description, 120) }}</p>
         @endif
 
         <div class="flex items-center gap-4 text-on-surface-variant font-label-sm">

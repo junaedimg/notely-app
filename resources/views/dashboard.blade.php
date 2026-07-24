@@ -3,15 +3,15 @@
 @section('title', 'Dashboard')
 
 @section('content')
-<section class="mb-8 lg:mb-10">
+<section class="mb-4 lg:mb-6">
     <div>
-        <span class="font-label-sm text-label-sm text-secondary uppercase tracking-widest mb-1 block">Workspace</span>
+        <span class="font-label-sm text-label-sm text-secondary uppercase tracking-widest mb-1 block">Deep Work Session</span>
         <h2 class="font-headline-lg text-headline-lg-mobile md:text-headline-lg text-on-surface">Focus</h2>
     </div>
 </section>
 
 @if($pinnedNotes->count() > 0)
-<section class="mb-8 lg:mb-10">
+<section class="mb-4 lg:mb-6">
     <div class="flex items-center justify-between mb-4">
         <div class="flex items-center gap-2">
             <span class="material-symbols-outlined text-primary text-sm">push_pin</span>
@@ -35,7 +35,7 @@
 @endif
 
 {{-- Today's Actions --}}
-<section class="max-w-[720px] mb-8 lg:mb-10">
+<section class="max-w-[720px] mb-4 lg:mb-6">
     <div class="flex items-center justify-between mb-4">
         <div class="flex items-center gap-2">
             <span class="material-symbols-outlined text-primary text-sm">task_alt</span>
@@ -48,35 +48,33 @@
     </div>
     <div class="space-y-3">
         @forelse($todayTodos as $todo)
-        <div class="bg-surface-container-lowest border border-outline-variant rounded-xl p-4 flex items-center justify-between hover:shadow-md transition-shadow group">
-            <div class="flex items-center gap-4">
-                <button data-complete data-action="{{ route('todos.complete', $todo) }}" class="w-6 h-6 rounded-lg border-2 border-outline-variant hover:border-primary flex items-center justify-center transition-all bg-transparent flex-shrink-0">
-                    <span class="material-symbols-outlined text-xs text-on-primary hidden">check</span>
-                </button>
-                <div>
-                    <p class="font-body-md font-medium text-on-surface group-hover:text-primary transition-colors">{{ $todo->title }}</p>
-                    <div class="flex items-center gap-2 mt-1">
-                        @if($todo->quadrant === 'do')
-                        <span class="font-label-sm text-[10px] text-error px-2 py-0.5 border border-error rounded-full font-semibold uppercase tracking-wide">Urgent & Important</span>
-                        @elseif($todo->quadrant === 'plan')
-                        <span class="font-label-sm text-[10px] text-primary px-2 py-0.5 border border-primary rounded-full font-semibold uppercase tracking-wide">Important</span>
-                        @elseif($todo->quadrant === 'delegate')
-                        <span class="font-label-sm text-[10px] text-secondary px-2 py-0.5 border border-secondary rounded-full font-semibold uppercase tracking-wide">Urgent</span>
-                        @endif
-                        @if($todo->next_due_at)
-                        <span class="text-secondary font-label-sm text-[10px]">Due {{ $todo->next_due_at->format('g:i A') }}</span>
-                        @endif
-                        @if($todo->repeat_type !== 'none')
-                        <span class="material-symbols-outlined text-secondary text-[14px]">refresh</span>
-                        @endif
-                    </div>
+        <div class="bg-white p-5 border border-outline-variant rounded-lg shadow-sm hover:shadow-md transition-shadow group"
+             style="border-left: 4px solid {{ $todo->quadrant_color }};">
+            <div class="flex justify-between items-start mb-2">
+                <div class="flex gap-2">
+                    <x-quadrant :quadrant="$todo->quadrant" />
                 </div>
-            </div>
-            <div class="flex items-center gap-1">
                 @if($todo->repeat_type !== 'none')
-                <button data-skip data-action="{{ route('todos.skip', $todo) }}" class="material-symbols-outlined text-secondary text-sm p-2 hover:bg-surface-container-low rounded-full" title="Skip">skip_next</button>
+                <div class="flex items-center gap-1 text-on-surface-variant group-hover:text-primary shrink-0">
+                    <span class="material-symbols-outlined text-[16px]">refresh</span>
+                    <span class="font-label-sm text-[10px] capitalize">{{ $todo->repeat_type }}</span>
+                </div>
                 @endif
-                <a href="{{ route('todos.edit', $todo) }}" class="material-symbols-outlined text-secondary text-sm p-2 hover:bg-surface-container-low rounded-full">more_vert</a>
+            </div>
+
+            <h3 class="font-headline-md text-headline-md text-on-surface mb-1">{{ $todo->title }}</h3>
+
+            <div class="flex items-center gap-4 text-on-surface-variant font-label-sm">
+                @if($todo->next_due_at)
+                <div class="flex items-center gap-1">
+                    <span class="material-symbols-outlined text-[18px]">calendar_today</span>
+                    <span>{{ $todo->next_due_at->format('M d, g:i A') }}</span>
+                </div>
+                @endif
+                <div class="flex items-center gap-2 ml-auto">
+                    <button data-skip data-action="{{ route('todos.skip', $todo) }}" class="material-symbols-outlined text-secondary text-[18px] p-1 hover:bg-surface-container-low rounded-full" title="Skip">skip_next</button>
+                    <button data-complete data-action="{{ route('todos.complete', $todo) }}" class="material-symbols-outlined text-secondary text-[18px] p-1 hover:bg-primary-fixed rounded-full hover:text-primary" title="Complete">check_circle</button>
+                </div>
             </div>
         </div>
         @empty
@@ -90,7 +88,7 @@
 </section>
 
 {{-- Schedule Overview --}}
-<section class="max-w-[720px] mb-8 lg:mb-10">
+<section class="max-w-[720px] mb-4 lg:mb-6">
     <div class="flex items-center justify-between mb-4">
         <div class="flex items-center gap-2">
             <span class="material-symbols-outlined text-primary text-sm">calendar_month</span>
@@ -158,9 +156,7 @@
                     </span>
                     <div class="min-w-0">
                         <p class="text-xs font-medium text-on-surface">{{ $todo->title }}</p>
-                        <span class="text-[9px] {{ $todo->quadrant === 'do' ? 'text-error' : ($todo->quadrant === 'plan' ? 'text-primary' : 'text-secondary') }} uppercase font-semibold">
-                            {{ $todo->quadrant === 'do' ? 'Urgent & Important' : ($todo->quadrant === 'plan' ? 'Important' : ($todo->quadrant === 'delegate' ? 'Urgent' : 'Eliminate')) }}
-                        </span>
+                        <x-quadrant :quadrant="$todo->quadrant" class="mt-0.5" />
                     </div>
                 </div>
                 @endforeach

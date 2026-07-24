@@ -82,7 +82,7 @@ Contoh: days = [Sabtu, Minggu]
 | `date` | `end_date` | Stop after this date |
 | `count` | `end_count` | Stop after N completions |
 
-UI hanya menampilkan field yang relevan berdasarkan pilihan `end_type`.
+UI hanya menampilkan field yang relevan berdasarkan pilihan `end_type` (show/hide via JS).
 
 ---
 
@@ -94,6 +94,28 @@ Complete dan Skip redirect ke **halaman asal** (dashboard / todos index / todos 
 - Complete dari todos index → redirect balik ke todos index
 
 Ini diimplementasikan via hidden input `_redirect` yang dikirim oleh JS.
+
+---
+
+## Soft Delete
+
+Todos mendukung soft delete. Saat dihapus, data tidak langsung hilang dari database melainkan diberi timestamp `deleted_at`.
+
+- Delete dari halaman todos → soft delete
+- Data yang sudah dihapus tidak muncul di index, dashboard, atau calendar
+- (Fitur restore akan datang)
+
+---
+
+## Status Count
+
+Tab navigation di todos index menampilkan jumlah per status:
+
+```
+Active (12)     Paused (3)     Archived (5)
+```
+
+Angka di badge berwarna **primary-filled** saat tab aktif, **abu-abu** saat tidak aktif.
 
 ---
 
@@ -126,7 +148,7 @@ The Todo never changes. The History records what actually happened.
 
 ---
 
-## Priority System
+## Priority System — Eisenhower Matrix
 
 This application uses the Eisenhower Matrix instead of traditional priorities.
 
@@ -137,13 +159,28 @@ Is it Important?
 Is it Urgent?
 ```
 
-The quadrant is calculated automatically.
+The quadrant is calculated automatically at runtime (computed attribute, never stored).
 
-| Important | Urgent | Result    |
-|-----------|--------|-----------|
-| Yes       | Yes    | Do        |
-| Yes       | No     | Plan      |
-| No        | Yes    | Delegate  |
-| No        | No     | Eliminate |
+### Quadrant Mapping
 
-The quadrant is never stored in the database. It is always calculated.
+| Important | Urgent | Quadrant | Label | Color |
+|-----------|--------|----------|-------|-------|
+| Yes | Yes | `do` | Kerjakan | 🔴 Merah |
+| Yes | No | `decide` | Jadwalkan | 🟡 Kuning |
+| No | Yes | `delegate` | Delegasikan | 🟢 Hijau |
+| No | No | `delete` | Hilangkan | 🔵 Biru |
+
+### Visual
+
+Setiap card todo memiliki:
+1. **Left border accent** — 4px solid color sesuai kuadran
+2. **Badge** — rounded-full dengan icon + label per kuadran
+
+Warna diambil dari `$todo->quadrant_color` (computed attribute di model), bukan disimpan di database.
+
+### UI Components
+
+```
+Component: <x-quadrant :quadrant="$todo->quadrant" />
+Color:      $todo->quadrant_color → hex color string
+```

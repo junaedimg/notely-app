@@ -54,4 +54,14 @@ When asked to implement or modify a feature:
 
 ## Project Status
 
-This is a **partially implemented project**. Most core features (Notes CRUD, Todos CRUD, Scheduler, Eisenhower Matrix, History) are built. Auth/user layer has been removed — this is a single-user application.
+This is a **partially implemented project**. Most core features are built:
+
+- Notes (CRUD + Pin toggle + Soft Delete)
+- Todos (CRUD + Complete/Skip + Soft Delete)
+- Todo History (index + delete)
+- Scheduler (daily, weekly with days_of_week, monthly, yearly, interval)
+- Eisenhower Matrix (4 quadrants with color coding + visual badge component)
+- Dashboard (pinned notes, today's actions, date navigation, 2-week calendar)
+- Single user (auth/user model removed)
+- Repeat end conditions (never, date, count)
+- Simulated date navigation (top bar date picker)

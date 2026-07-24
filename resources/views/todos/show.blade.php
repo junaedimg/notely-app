@@ -14,14 +14,7 @@
         <div class="flex justify-between items-start mb-4">
             <div>
                 <div class="flex gap-2 mb-3">
-                    @if($todo->is_urgent && $todo->is_important)
-                    <span class="px-2 py-0.5 rounded-sm border border-error text-error font-label-sm text-[10px] uppercase">Urgent</span>
-                    <span class="px-2 py-0.5 rounded-sm border border-primary text-primary font-label-sm text-[10px] uppercase">Important</span>
-                    @elseif($todo->is_important)
-                    <span class="px-2 py-0.5 rounded-sm border border-primary text-primary font-label-sm text-[10px] uppercase">Important</span>
-                    @elseif($todo->is_urgent)
-                    <span class="px-2 py-0.5 rounded-sm border border-error text-error font-label-sm text-[10px] uppercase">Urgent</span>
-                    @endif
+                    <x-quadrant :quadrant="$todo->quadrant" />
                 </div>
                 <h2 class="font-headline-lg text-headline-lg-mobile md:text-headline-lg text-on-surface">{{ $todo->title }}</h2>
             </div>
@@ -35,7 +28,7 @@
         </div>
 
         @if($todo->description)
-        <p class="text-on-surface-variant font-body-md mb-6">{{ $todo->description }}</p>
+        <p class="text-on-surface-variant font-body-md mb-6 whitespace-pre-line">{{ $todo->description }}</p>
         @endif
 
         <div class="grid grid-cols-2 gap-4 text-label-sm text-outline border-t border-outline-variant pt-6">
