@@ -79,7 +79,16 @@
 
         <h3 class="font-headline-md text-headline-md text-on-surface mb-1">{{ $todo->title }}</h3>
         @if($todo->description)
-        <p class="text-on-surface-variant font-body-md mb-4 whitespace-pre-line">{{ Str::limit($todo->description, 120) }}</p>
+        <p class="text-on-surface-variant font-body-md mb-3 whitespace-pre-line">{{ Str::limit($todo->description, 120) }}</p>
+        @endif
+
+        @if($todo->note && !$todo->note->trashed())
+        <div class="mb-3">
+            <a href="{{ route('notes.show', $todo->note) }}" class="inline-flex items-center gap-1 text-[10px] text-outline hover:text-primary transition-colors font-medium uppercase tracking-wider">
+                <span class="material-symbols-outlined text-[12px]">description</span>
+                {{ $todo->note->title }}
+            </a>
+        </div>
         @endif
 
         <div class="flex items-center gap-4 text-on-surface-variant font-label-sm">

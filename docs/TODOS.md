@@ -144,7 +144,16 @@ Terdapat di halaman index todos: tab **Trash** menampilkan semua todos yang suda
 | **Soft delete** | Histories tetap ada. Di halaman History, todo title tetap muncul dengan label **· Trashed** |
 | **Force delete** | Histories tetap ada karena FK `nullOnDelete`. `todo_id` menjadi NULL, title berubah menjadi "Deleted Todo" |
 | **Restore** | Histories kembali terhubung secara normal, label "· Trashed" hilang |
-- Jika trash kosong, menampilkan pesan "Trash is empty."
+
+### Note Relation
+
+Di halaman index todos, jika todo memiliki parent note dan note tersebut tidak di-soft-delete, maka akan ditampilkan tautan ke note bersangkutan di bawah deskripsi todo.
+
+```
+📄 Nama Note
+```
+
+Klik tautan → menuju halaman show note tersebut.
 
 ---
 

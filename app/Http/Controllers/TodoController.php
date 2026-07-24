@@ -17,9 +17,9 @@ class TodoController extends Controller
         $tab = $request->get('tab', 'active');
 
         if ($tab === 'trash') {
-            $todos = Todo::onlyTrashed()->orderBy('deleted_at', 'desc')->get();
+            $todos = Todo::onlyTrashed()->with('note')->orderBy('deleted_at', 'desc')->get();
         } else {
-            $todos = Todo::when($tab === 'active', function ($q) {
+            $todos = Todo::with('note')->when($tab === 'active', function ($q) {
                     return $q->where('status', 'active');
                 })
                 ->when($tab === 'paused', function ($q) {
