@@ -21,6 +21,7 @@
 - App name from env (configurable via APP_NAME)
 - Note color (swatch picker, left border accent, background tint)
 - Note card component (x-note-card reused in index & dashboard)
+- SweetAlert2 modals (complete, skip, delete confirmations)
 
 ## Current Scope (Included)
 

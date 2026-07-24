@@ -95,6 +95,27 @@ Complete dan Skip redirect ke **halaman asal** (dashboard / todos index / todos 
 
 Ini diimplementasikan via hidden input `_redirect` yang dikirim oleh JS.
 
+### SweetAlert2 Confirmation
+
+Saat klik Complete atau Skip, muncul modal SweetAlert2:
+
+**Complete:**
+- Title: ✅ Complete
+- Menampilkan todo title + tanggal saat ini
+- Input "Completion note (optional)"
+- Tombol [Cancel] [Complete]
+
+**Skip:**
+- Title: ⏭ Skip
+- Menampilkan todo title + tanggal saat ini
+- Input "Reason (optional)"
+- Tombol [Cancel] [Skip]
+
+Semua tombol delete (todo, note, history) juga menggunakan SweetAlert2:
+- Title: "Delete [item]?"
+- "This action cannot be undone."
+- Tombol [Cancel] [Delete] (merah)
+
 ---
 
 ## Soft Delete
