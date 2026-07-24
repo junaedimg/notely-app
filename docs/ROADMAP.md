@@ -17,6 +17,8 @@
 - Dashboard calendar (2-week view with dot indicators and day detail panel)
 - Layout wrapper (consistent max-width for header, main, nav across all pages)
 - Status count badge on todos tab navigation
+- Login page (single user with .env credentials)
+- App name from env (configurable via APP_NAME)
 
 ## Current Scope (Included)
 

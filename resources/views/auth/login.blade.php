@@ -3,7 +3,11 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Login — Notely</title>
+    <title>{{ config('app.name') }} — Login</title>
+    <link rel="icon" type="image/x-icon" href="{{ asset('favicon_io/favicon.ico') }}">
+    <link rel="icon" type="image/png" sizes="32x32" href="{{ asset('favicon_io/favicon-32x32.png') }}">
+    <link rel="icon" type="image/png" sizes="16x16" href="{{ asset('favicon_io/favicon-16x16.png') }}">
+    <link rel="apple-touch-icon" href="{{ asset('favicon_io/apple-touch-icon.png') }}">
     @fonts
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet">
@@ -11,7 +15,7 @@
 <body class="bg-background font-body-md text-on-surface min-h-screen flex items-center justify-center px-4">
     <div class="w-full max-w-sm">
         <div class="text-center mb-8">
-            <h1 class="font-headline-lg text-headline-lg text-primary font-bold">Notely</h1>
+            <h1 class="font-headline-lg text-headline-lg text-primary font-bold">{{ config('app.name') }}</h1>
             <p class="text-on-surface-variant font-body-md mt-2">Sign in to your workspace</p>
         </div>
 
