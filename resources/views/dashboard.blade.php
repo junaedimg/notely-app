@@ -30,7 +30,7 @@
 @endif
 
 {{-- Today's Actions --}}
-<section class="max-w-[720px] mb-4 lg:mb-6">
+<section class="mb-4 lg:mb-6">
     <div class="flex items-center justify-between mb-4">
         <div class="flex items-center gap-2">
             <span class="material-symbols-outlined text-primary text-sm">task_alt</span>
@@ -41,7 +41,7 @@
             <a href="{{ route('todos.index') }}" class="text-primary font-label-sm text-label-sm hover:underline">Manage</a>
         </div>
     </div>
-    <div class="space-y-3">
+    <div class="space-y-3 max-w-[720px]">
         @forelse($todayTodos as $todo)
         <div class="bg-white p-5 border border-outline-variant rounded-lg shadow-sm hover:shadow-md transition-shadow group"
              style="border-left: 4px solid {{ $todo->quadrant_color }};">
@@ -83,14 +83,14 @@
 </section>
 
 {{-- Schedule Overview --}}
-<section class="max-w-[720px] mb-4 lg:mb-6">
+<section class="mb-4 lg:mb-6">
     <div class="flex items-center justify-between mb-4">
         <div class="flex items-center gap-2">
             <span class="material-symbols-outlined text-primary text-sm">calendar_month</span>
             <h3 class="font-label-sm text-label-sm text-secondary uppercase tracking-widest">Schedule Overview</h3>
         </div>
     </div>
-    <div id="calendar-section" class="bg-surface-container-lowest border border-outline-variant rounded-xl p-4 shadow-sm">
+    <div id="calendar-section" class="bg-surface-container-lowest border border-outline-variant rounded-xl p-4 shadow-sm max-w-[720px]">
         <div class="flex items-center justify-between mb-3">
             <h3 class="font-headline-md text-sm font-bold text-on-surface">{{ $weekLabel }}</h3>
             <div class="flex gap-1">

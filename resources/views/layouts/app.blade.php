@@ -82,6 +82,13 @@
                 <span class="material-symbols-outlined mb-0.5 @if(request()->routeIs('history.*')) font-bold @endif" @if(request()->routeIs('history.*')) style="font-variation-settings: 'FILL' 1;" @endif>history</span>
                 <span class="font-label-sm text-[10px] @if(request()->routeIs('history.*')) font-bold @endif">History</span>
             </a>
+            <a href="{{ route('trash.index') }}" class="flex flex-col items-center justify-center text-secondary hover:text-primary transition-colors w-full h-full relative @if(request()->routeIs('trash.*')) text-primary @endif">
+                @if(request()->routeIs('trash.*'))
+                <div class="absolute top-1 left-1/2 -translate-x-1/2 w-5 h-1 bg-primary rounded-full"></div>
+                @endif
+                <span class="material-symbols-outlined mb-0.5 @if(request()->routeIs('trash.*')) font-bold @endif" @if(request()->routeIs('trash.*')) style="font-variation-settings: 'FILL' 1;" @endif>delete_sweep</span>
+                <span class="font-label-sm text-[10px] @if(request()->routeIs('trash.*')) font-bold @endif">Trash</span>
+            </a>
         </div>
     </nav>
 
