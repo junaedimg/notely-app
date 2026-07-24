@@ -25,7 +25,7 @@ The docs are organized by domain, not by file type. Start with the module you ne
 - **Computed fields** are never stored in the database — they are calculated at runtime (e.g., Eisenhower quadrant, next occurrence).
 - **Single Responsibility** — each module owns one concern and does not leak into others.
 - **Data is normalized** — rules, execution records, and calculations are kept separate.
-- **Single user** — no authentication, no login/register, no user model.
+- **Single user** — login via username + password from `.env` (no user table, no registration).
 
 ---
 
@@ -64,4 +64,5 @@ This is a **partially implemented project**. Most core features are built:
 - Dashboard (pinned notes, today's actions, date navigation, 2-week calendar)
 - Single user (auth/user model removed)
 - Repeat end conditions (never, date, count)
+- Single user login (username + password via .env, no user table)
 - Simulated date navigation (top bar date picker)

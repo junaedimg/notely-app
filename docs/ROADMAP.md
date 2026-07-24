@@ -12,6 +12,7 @@
 - Scheduler (schedule-based & completion-based anchor)
 - Eisenhower Matrix (computed attribute, 4 quadrants with color coding, badge component)
 - Single user (auth/user model removed)
+- Single user login (session-based auth via .env credentials)
 - Date navigation (change displayed date via top bar date picker)
 - Dashboard calendar (2-week view with dot indicators and day detail panel)
 - Layout wrapper (consistent max-width for header, main, nav across all pages)

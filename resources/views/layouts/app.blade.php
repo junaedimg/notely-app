@@ -28,10 +28,14 @@
                     <button type="submit" form="date-form" class="bg-primary text-on-primary px-2 py-0.5 rounded-lg font-label-sm text-[10px] hover:brightness-110 active:scale-95 transition-all">Set</button>
                     <form method="POST" action="{{ route('dashboard.reset-today') }}" class="flex">
                         @csrf
-                        <button type="submit" class="text-[10px] font-label-sm text-secondary hover:text-primary px-1">Reset Today</button>
+                        <button type="submit" class="text-[10px] font-label-sm text-secondary hover:text-primary px-1">Reset</button>
                     </form>
                 </div>
                 @endif
+                <form method="POST" action="{{ route('logout') }}">
+                    @csrf
+                    <button type="submit" class="material-symbols-outlined text-secondary hover:text-error active:scale-90 transition-all p-1.5 rounded-full hover:bg-error-container text-sm" title="Logout">logout</button>
+                </form>
             </div>
         </div>
     </header>
